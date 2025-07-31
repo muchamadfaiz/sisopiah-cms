@@ -35,11 +35,12 @@ export const LoginForm = (props) => {
 			console.log("Submit!")
 			dispatch(showLoading())
 			const credentials = {
-				email: values.email,
+				// email: values.email,
+				username: values.username,
 				password: values.password
 			}
 			console.log(credentials)
-			const user = await axios.post('https://api.gerindrasumsel.info/api/v1/auth/login', credentials).then(response => {
+			const user = await axios.post('http://localhost:3001/api/v1/auth/login', credentials).then(response => {
 				// console.log(response)
 				return response
 			}).catch(function (error) {
@@ -95,7 +96,8 @@ export const LoginForm = (props) => {
 				onFinish={handleValidSubmit}
 			>
 				<Form.Item
-					name="email"
+					// name="email"
+					name="username"
 					label="Email"
 				>
 					<Input prefix={<MailOutlined className="text-primary" />} />
