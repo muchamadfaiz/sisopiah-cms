@@ -22,7 +22,7 @@ const Login = props => {
 		</div>)
 	} else {
 		return (
-			<div className="h-100" style={{background:"#990000"}}>
+			<div className="h-100" style={{background:"#3CB2B1"}}>
 				<div className="container d-flex flex-column justify-content-center h-100">
 					<Row justify="center">
 						<Col xs={20} sm={20} md={20} lg={7}>
