@@ -1,0 +1,105 @@
+@font-face {
+  font-family: PlusJakartaSans;
+  src: url(../../fonts/PlusJakartaSans-Regular.woff);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: PlusJakartaSans;
+  src: url(../../fonts/PlusJakartaSans-Italic.woff);
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: PlusJakartaSans;
+  src: url(../../fonts/PlusJakartaSans-SemiBold.woff);
+  font-weight: 500;
+}
+@font-face {
+  font-family: PlusJakartaSans;
+  src: url(../../fonts/PlusJakartaSans-Bold.woff);
+  font-weight: bold;
+}
+
+// Color pallete dynamically imported via loader
+
+// State Colors
+$primary:                    $brand-primary !default;
+$secondary:                  $brand-secondary !default;
+$success:                    $cyan !default;
+$info:                       $blue !default;
+$warning:                    $gold !default;
+$danger:                     $volcano !default;
+
+$state-color-loop: (
+  primary $primary,
+  secondary $secondary,
+  success $success,
+  danger $danger,
+  info $info,
+  warning $warning,
+);
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    "primary":    $primary,
+    "secondary":  $secondary,
+    "success":    $success,
+    "info":       $info,
+    "warning":    $warning,
+    "danger":     $danger,
+    "gray":       $gray,
+    "gray-light": $gray-light,
+    "dark":       $gray-dark
+  ),
+  $theme-colors
+);
+
+// Tones Colors
+$tone-magenta:              $magenta !default;  
+$tone-magenta-light:        rgba($magenta, 0.05) !default; 
+
+$tone-red:                  $red !default;  
+$tone-red-light:            rgba($red, 0.05) !default;    
+
+$tone-volcano:              $volcano !default;  
+$tone-volcano-light:        rgba($volcano, 0.05) !default; 
+
+$tone-orange:               $orange !default;  
+$tone-orange-light:         rgba($orange, 0.1) !default; 
+
+$tone-gold:                 $gold !default;  
+$tone-gold-light:           rgba($gold, 0.1) !default;
+
+$tone-lime:                 $lime !default;  
+$tone-lime-light:           rgba($lime, 0.1) !default;
+
+$tone-green:                $green !default;  
+$tone-green-light:          rgba($green, 0.1) !default;
+
+$tone-cyan:                 $cyan !default;  
+$tone-cyan-light:           rgba($cyan, 0.1) !default;
+
+$tone-blue:                 $blue !default;  
+$tone-blue-light:           rgba($blue, 0.1) !default;
+
+$tone-geekblue:             $geekblue !default;  
+$tone-geekblue-light:       rgba($geekblue, 0.1) !default;
+
+$tone-purple:               $purple !default;  
+$tone-purple-light:         rgba($purple, 0.1) !default;
+
+$tone-loop: (
+  "magenta"     $tone-magenta     $tone-magenta-light,
+  "red"         $tone-red         $tone-red-light,
+  "volcano"     $tone-volcano     $tone-volcano-light,
+  "orange"      $tone-orange      $tone-orange-light,
+  "gold"        $tone-gold        $tone-gold-light,
+  "lime"        $tone-lime        $tone-lime-light,
+  "green"       $tone-green       $tone-green-light,
+  "cyan"        $tone-cyan        $tone-cyan-light,
+  "blue"        $tone-blue        $tone-blue-light,
+  "geekblue"    $tone-geekblue    $tone-geekblue-light,
+  "purple"      $tone-purple      $tone-purple-light
+);
