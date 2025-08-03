@@ -13,7 +13,7 @@ import USERS from "./users";
 import PROJECTS from "./projects";
 import MY_DAPUR from "./my-dapur";
 import OPEN_PROJECTS from "./open-projects";
-import PROJECTS_OPD from "./projects-opd";
+import MURID from "./murid";
 import FINISHED_PROJECTS from "./finished-projects";
 import VERIFICATION_PROJECTS from "./verification-projects";
 import VENDORS from "./vendors";
@@ -30,7 +30,7 @@ import DETAIL_PROJECT_VERIFICATION_PROECESS from "./detail-project-verification-
 import AMBIL_PROJECT from "./ambil-project";
 import DETAIL_WAJIB from "./detail-wajib";
 import DETAIL_USER from "./detail-user";
-import DETAIL_PROJECT from "./detail-project";
+import DETAIL_PROJECT, { DETAIL_MURID } from "./detail-murid";
 import DETAIL_PROJECT_READ_ONLY from "./detail-project-read-only";
 import DETAIL_PROJECT_OPD from "./detail-project-opd";
 import DETAIL_TAG from "./detail-tag";
@@ -51,7 +51,8 @@ export const AppViews = ({ match }) => {
         const token = localStorage.getItem('token');
         const decoded = jwt_decode(token);
 
-        setPrivilege(decoded.role_id)
+        // setPrivilege(decoded.role_id)
+        setPrivilege(1)
       }
     } catch (err) {
       console.log({ err })
@@ -88,15 +89,15 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.proyek_opd}`}
-          component={PROJECTS_OPD}
+          path={`${strings.navigation.path.student}`}
+          component={MURID}
         />
-        <PrivateRoute
+        {/* <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.finished_projects}`}
           component={FINISHED_PROJECTS}
-        />
+        /> */}
         <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
@@ -186,8 +187,8 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project}`}
-          component={DETAIL_PROJECT}
+          path={`${strings.navigation.path.detail_murid}`}
+          component={DETAIL_MURID}
         />
         <PrivateRoute
           privileges={all_privileges}

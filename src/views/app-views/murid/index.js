@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { fetchAllDapurs } from "redux/features/dapur";
+import { fetchAllDapurs, fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -39,7 +39,7 @@ const LocalizedModal = () => {
   );
 }
 
-export const PROJECTS = () => {
+export const MURID = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
@@ -68,6 +68,11 @@ export const PROJECTS = () => {
     }
   };
 
+  const genderMap = {
+    P: "Perempuan",
+    L: "Laki-laki"
+  };
+
   const tableColumns = [
     {
     title: "No",
@@ -77,97 +82,99 @@ export const PROJECTS = () => {
         (filters.page - 1) * filters.limit + index + 1,
     },
     {
+      title: "NIS",
+      dataIndex: "nis",
+      key: "nis",
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "PIC",
-      dataIndex: "pic",
-      key: "pic",
-      render: (_, record) => (
-        <div>
-          <a target="_blank">{record.pic || "Belum Ada"}</a>
-        </div>
-      ),
+      title: "Gender",
+      dataIndex: "gender",
+      key: "gender",
+      render: (gender) => genderMap[gender] || "-"
     },
     {
-      title: "Layout",
-      dataIndex: "layout",
-      key: "layout",
+      title: "Tanggal Lahir",
+      dataIndex: "birth_date",
+      key: "birth_date",
+      render: (text) => moment(text).format("DD-MM-YYYY"),
     },
     {
-      title: "Kabupaten",
-      dataIndex: "regency",
-      key: "regency",
+      title: "Kelas",
+      dataIndex: "class",
+      key: "class",
     },
     {
-      title: "Kecamatan",
-      dataIndex: "district",
-      key: "district",
-    },
-    {
-      title: "Kelurahan",
-      dataIndex: "sub_district",
-      key: "sub_district",
-    },
-    {
-      title: "Alamat",
+      title: "Address",
       dataIndex: "address",
       key: "address",
     },
     {
-      title: "Legalitas",
-      dataIndex: "legality",
-      key: "legality",
+      title: "Wali Murid",
+      dataIndex: "guardians",
+      key: "guardians",
+      render: (_, record) => {
+        const guardian = record.guardians?.[0]?.guardian
+        return guardian ? guardian.name : "-"
+        }
     },
-    {
-      title: "No Phone",
-      dataIndex: "phone_number",
-      key: "phone_number",
-    },
-    {
-      title: "Video",
-      dataIndex: "access_video",
-      key: "access_video",
-      render: (text) => (
-        <div className="text-center">
-      <Button
-        type="primary"
-        style={{ color: "white" }}
-        onClick={() => {
-          window.open(text, "_blank");
-        }}
-      >
-        Lihat Video
-      </Button>
-    </div>
-      ),
-    },
-    {
-      title: "Proposal",
-      dataIndex: "proposal_link",
-      key: "proposal_link",
-      render: (text, record) => (
-    <div className="text-center">
-      <Button
-        type="primary"
-        style={{ color: "white" }}
-        onClick={() => {
-          window.open(text, "_blank");
-        }}
-      >
-        Lihat Proposal
-      </Button>
-    </div>
-  ),
-    },
+    // {
+    //   title: "Legalitas",
+    //   dataIndex: "legality",
+    //   key: "legality",
+    // },
+    // {
+    //   title: "No Phone",
+    //   dataIndex: "phone_number",
+    //   key: "phone_number",
+    // },
+//     {
+//       title: "Video",
+//       dataIndex: "access_video",
+//       key: "access_video",
+//       render: (text) => (
+//         <div className="text-center">
+//       <Button
+//         type="primary"
+//         style={{ color: "white" }}
+//         onClick={() => {
+//           window.open(text, "_blank");
+//         }}
+//       >
+//         Lihat Video
+//       </Button>
+//     </div>
+//       ),
+//     },
+//     {
+//       title: "Proposal",
+//       dataIndex: "proposal_link",
+//       key: "proposal_link",
+//       render: (text, record) => (
+//     <div className="text-center">
+//       <Button
+//         type="primary"
+//         style={{ color: "white" }}
+//         onClick={() => {
+//           window.open(text, "_blank");
+//         }}
+//       >
+//         Lihat Proposal
+//       </Button>
+//     </div>
+//   ),
+//     },
     {
       title: () => <div className="text-center">Action</div>,
       key: "status",
       fixed: 'right',
       render: (_, record) => {
-        if (role !== 1) {
+        if (role !== 1) 
+            {
           return (
             <div className="text-center">
               <Button
@@ -181,7 +188,8 @@ export const PROJECTS = () => {
                   });
                 }}
               >
-                Lihat Dapur
+                {/* Lihat Dapur */}
+                Detail Murid
               </Button>
             </div>
           )
@@ -211,7 +219,7 @@ export const PROJECTS = () => {
   const getData = async (params) => {
     try {
     //   setLoading(true);
-      const response = await dispatch(fetchAllDapurs(params)).unwrap();
+      const response = await dispatch(fetchAllStudents(params)).unwrap();
       console.log('hahai: ', response.data)
     //   setData(response.data.Projects);
       setData(response.data);
@@ -307,10 +315,8 @@ export const PROJECTS = () => {
       <LocalizedModal></LocalizedModal>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
-          {/* <h2>Proyek CSR Berjalan di Sumatera Selatan</h2> */}
-          <h2>Dapur BGN di Sumatera Selatan</h2>
-          {/* <p>Daftar semua proyek CSR berjalan di Sumatera Selatan</p> */}
-          <p>Daftar semua dapur BGN di Sumatera Selatan</p>
+          <h2>Murid di SiSopiah</h2>
+          <p>Daftar semua murid di SiSopiah</p>
         </Col>
       </Row>
       <Row gutter={24}>
@@ -318,16 +324,10 @@ export const PROJECTS = () => {
           <Card>
             <Row gutter={[6, 6]}>
               <Col md={8} xl={8} sm={24} >
-                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Judul Proyek" allowClear/>
+                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Murid" allowClear/>
               </Col>
               <Col md={4} xl={4} sm={24} >
-                <Input onChange={handleSearchKabupaten} name="kabupaten" placeholder="Kota/Kabupaten" allowClear/>
-              </Col>
-              <Col md={4} xl={4} sm={24} >
-                <Input onChange={handleSearchKecamatan} name="kecamatan" placeholder="Kecamatan" allowClear/>
-              </Col>
-              <Col md={4} xl={4} sm={24} >
-                <Input onChange={handleSearchKelurahan} name="kelurahan" placeholder="Kelurahan" allowClear/>
+                <Input onChange={handleSearchKabupaten} name="guardians" placeholder="Wali Murid" allowClear/>
               </Col>
               {/* <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchByOPD} name="opd" placeholder="OPD"></Input>
@@ -364,12 +364,12 @@ export const PROJECTS = () => {
             htmlType="submit"
             onClick={() => {
               history.push({
-                pathname: `${strings.navigation.path.detail_project}`,
+                pathname: `${strings.navigation.path.detail_murid}`,
               });
             }}
             block
           >
-            Tambahkan Dapur
+            Tambahkan Murid
           </Button>
         </Col>
       </Row>
@@ -378,4 +378,4 @@ export const PROJECTS = () => {
   );
 };
 
-export default withRouter(PROJECTS);
+export default withRouter(MURID);

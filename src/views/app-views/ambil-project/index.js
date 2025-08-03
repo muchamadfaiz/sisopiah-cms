@@ -17,7 +17,7 @@ import {
 } from "redux/features/projects";
 import { MyEditor } from "../../../components/Editor";
 import moment from "moment";
-import { addDapur, fetchOneDapur, updateDapur } from "redux/features/dapur";
+import { addStudent, fetchOneStudent, updateStudent } from "redux/features/students";
 
 const selectStyle = {
   width: "100%",
@@ -101,7 +101,7 @@ export const DETAIL_PROJECT = () => {
 
   const createData = async (values) => {
     try {
-      await dispatch(addDapur({
+      await dispatch(addStudent({
         ...values,
         // name: values.name.toUpperCase(),
         // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
@@ -162,7 +162,7 @@ export const DETAIL_PROJECT = () => {
 
   const updateData = async (values) => {
     try {
-      await dispatch(updateDapur({
+      await dispatch(updateStudent({
         ...values,
         // name: values.name.toUpperCase(),
         // id: location?.state?.id,
@@ -215,7 +215,7 @@ export const DETAIL_PROJECT = () => {
 
   const getDataById = async (id) => {
     try {
-      const data = await dispatch(fetchOneDapur(id)).unwrap();
+      const data = await dispatch(fetchOneStudent(id)).unwrap();
       setMarkerLocation({
         latitude: parseFloat(data.data.latitude),
         longitude: parseFloat(data.data.longitude),

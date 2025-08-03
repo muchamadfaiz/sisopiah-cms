@@ -36,7 +36,9 @@ const PrivateRoute = ({ component: Component, auth, privileges, requiredPrivileg
     <Route
       {...rest}
       render={props =>
-        localStorage.getItem('token') && hasPrivilege() ? (
+        localStorage.getItem('token') 
+        && hasPrivilege() ? 
+        (
           <Component {...props} />
         ) : (
           <Redirect to="/auth" />

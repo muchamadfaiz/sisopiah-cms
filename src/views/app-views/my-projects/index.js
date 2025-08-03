@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { fetchAllDapurs } from "redux/features/dapur";
+import { fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -211,7 +211,7 @@ export const MYPROJECTS = () => {
   const getData = async (params) => {
     try {
     //   setLoading(true);
-      const response = await dispatch(fetchAllDapurs(params)).unwrap();
+      const response = await dispatch(fetchAllStudents(params)).unwrap();
       console.log('hahai: ', response.data)
     //   setData(response.data.Projects);
       setData(response.data);

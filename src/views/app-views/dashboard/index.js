@@ -4,13 +4,13 @@ import { withRouter } from "react-router-dom";
 import StatisticWidget from "components/shared-components/StatisticWidget";
 import { useDispatch } from "react-redux";
 import { fetchProjectSummary } from "redux/features/projects";
-import { fetchAllDapurs } from "redux/features/dapur";
+import { fetchAllDapurs } from "redux/features/students";
 import { fetchAllProjects, fetchRankingCompany } from "redux/features/projects";
 import { kabupatens, opds, categories, sdgs } from '../../../constants/DataConstant'
 import { getUserProfile } from "redux/features/auth";
 import { PROJECTS } from "../projects";
 import Map from "../../../components/Maps";
-import OPD_PROJECTS from "../projects-opd";
+import OPD_PROJECTS from "../murid";
 import VerificationProjects from "../verification-projects";
 import { MYPROJECTS } from "../my-projects";
 
@@ -37,56 +37,30 @@ export const DefaultDashboard = () => {
   const [role, setRole] = useState(0);
   const [company, setCompany] = useState("");
 
-  const getAllDashboardData = async (params) => {
-    try {
-      const response = await dispatch(getUserProfile()).unwrap();
-      const summary = await dispatch(fetchProjectSummary()).unwrap();
-      const mySummary = await dispatch(fetchProjectSummary({ owner: response.data.user.perusahaan })).unwrap();
-      const opdSummary = await dispatch(fetchProjectSummary({ opd: response.data.user.opd })).unwrap();
+//   const getAllDashboardData = async (params) => {
+//     try {
+//       const response = await dispatch(getUserProfile()).unwrap();
+//       const summary = await dispatch(fetchProjectSummary()).unwrap();
+//       const mySummary = await dispatch(fetchProjectSummary({ owner: response.data.user.perusahaan })).unwrap();
+//       const opdSummary = await dispatch(fetchProjectSummary({ opd: response.data.user.opd })).unwrap();
 
-      setMyProjects(response.data.user.role_id === 3 ? opdSummary.data.totalProjects : mySummary.data.totalProjects)
-      setMyActual(response.data.user.role_id === 3 ? opdSummary.data.totalAmount._sum.actual : mySummary.data.totalAmount._sum.actual);
-      setMyTarget(response.data.user.role_id === 3 ? opdSummary.data.totalAmount._sum.cost : mySummary.data.totalAmount._sum.cost);
+//       setMyProjects(response.data.user.role_id === 3 ? opdSummary.data.totalProjects : mySummary.data.totalProjects)
+//       setMyActual(response.data.user.role_id === 3 ? opdSummary.data.totalAmount._sum.actual : mySummary.data.totalAmount._sum.actual);
+//       setMyTarget(response.data.user.role_id === 3 ? opdSummary.data.totalAmount._sum.cost : mySummary.data.totalAmount._sum.cost);
 
-      setActual(summary.data.totalAmount._sum.actual || 0);
-      setTarget(summary.data.totalAmount._sum.cost || 0);
-      setTotalProjects(summary.data.totalProjects)
-    } catch (error) {
-      message.error(error?.message || "Failed to fetch data");
-    }
-  };
+//       setActual(summary.data.totalAmount._sum.actual || 0);
+//       setTarget(summary.data.totalAmount._sum.cost || 0);
+//       setTotalProjects(summary.data.totalProjects)
+//     } catch (error) {
+//       message.error(error?.message || "Failed to fetch data");
+//     }
+//   };
 
   const getData = async () => {
     try {
       const response = await dispatch(fetchAllProjects()).unwrap();
       setAllProjects(response.data.Projects)
       setLoading(false);
-    } catch (error) {
-      message.error(error?.message || "Failed to fetch data");
-    }
-  }
-
-    const getDataDapur = async () => {
-    try {
-      const response = await dispatch(fetchAllDapurs()).unwrap();
-      console.log({
-        dapurs: response.data
-      })
-      setAllDapurs(response.data)
-      setLoading(false);
-    } catch (error) {
-      message.error(error?.message || "Failed to fetch data");
-    }
-  }
-
-  const getCompanyRanking = async () => {
-    try {
-      const perusahaan = await dispatch(getUserProfile()).unwrap();
-      const response = await dispatch(fetchRankingCompany({
-        perusahaan: perusahaan.data.user.perusahaan
-      })).unwrap();
-      setPerusahaan(perusahaan.data.user.perusahaan)
-      setRanking(response.data[0]?.rank || 0)
     } catch (error) {
       message.error(error?.message || "Failed to fetch data");
     }
@@ -119,10 +93,10 @@ export const DefaultDashboard = () => {
   };
 
   useEffect(() => {
-    getProfile()
-    getAllDashboardData()
-    getCompanyRanking()
-    getDataDapur()
+    // getProfile()
+    // getAllDashboardData()
+    // getCompanyRanking()
+    // getDataDapur()
   }, []);
 
   return (
@@ -141,19 +115,19 @@ export const DefaultDashboard = () => {
             <Col xs={24} sm={24} md={24} lg={12} xl={12} key={1}>
               <StatisticWidget
                 style={{ textAlign: "center" }}
-                title={`Semua Dapur`}
+                title={`Semua Murid`}
                 value={myProjects}
               />
             </Col>
             <Col xs={24} sm={24} md={24} lg={12} xl={12} key={2}>
               <StatisticWidget
                 style={{ textAlign: "center" }}
-                title={`Dapur Terverifikasi`}
+                title={`Semua Wali Murid`}
                 value={myProjects}
               />
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Card>
                 <Map projects={allDapurs}></Map>
@@ -178,8 +152,8 @@ export const DefaultDashboard = () => {
                 </div>
               </Card>
             </Col>
-          </Row>
-          {role === 1 && (
+          </Row> */}
+           {/* {role === 1 && (
             <Row>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <PROJECTS></PROJECTS>
@@ -192,28 +166,28 @@ export const DefaultDashboard = () => {
                 <MYPROJECTS></MYPROJECTS>
               </Col>
             </Row>
-          )}
-          {role === 4 && (
+          )} */}
+          {/* {role === 4 && (
             <Row>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <PROJECTS></PROJECTS>
               </Col>
             </Row>
-          )}
-          {role === 3 && (
+          )} */}
+          { (
             <Row>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <OPD_PROJECTS></OPD_PROJECTS>
               </Col>
             </Row>
           )}
-          {role === 5 && (
+          {/* {role === 5 && (
             <Row>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <VerificationProjects></VerificationProjects>
               </Col>
             </Row>
-          )}
+          )} */}
         </Col>
       </Row>
     </>

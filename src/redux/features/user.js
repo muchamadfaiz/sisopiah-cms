@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import URLS from 'redux/urls'
-import request2 from 'redux/utils/request2'
+import request from 'redux/utils/request'
 
 export const fetchAllUser = createAsyncThunk(
     'User/fetchAllUser',
     async (params, { rejectWithValue }) => {
         try {
-            const response = await request2('get', URLS.USER, params)
+            const response = await request('get', URLS.USER, params)
             return response
         } catch (error) {
             return rejectWithValue(error)
@@ -18,7 +18,7 @@ export const addUser = createAsyncThunk(
     'User/addUser',
     async (payload, { rejectWithValue }) => {
         try {
-            const response = await request2('post', URLS.USER, payload)
+            const response = await request('post', URLS.USER, payload)
             return response
         } catch (error) {
             return rejectWithValue(error)
@@ -30,7 +30,7 @@ export const updateUser = createAsyncThunk(
     'User/updateUser',
     async (payload, { rejectWithValue }) => {
         try {
-            const response = await request2('patch', `${URLS.USER}/${payload.id}`, payload)
+            const response = await request('patch', `${URLS.USER}/${payload.id}`, payload)
             return response
         } catch (error) {
             return rejectWithValue(error)
@@ -41,7 +41,7 @@ export const fetchOneUser = createAsyncThunk(
     'User/fetchOneUser',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await request2('get', `${URLS.USER}/${id}`)
+            const response = await request('get', `${URLS.USER}/${id}`)
             return response
         } catch (error) {
             return rejectWithValue(error)
@@ -53,7 +53,7 @@ export const deleteUser = createAsyncThunk(
     'User/deleteUser',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await request2('delete', `${URLS.USER}/${id}`)
+            const response = await request('delete', `${URLS.USER}/${id}`)
             return response
         } catch (error) {
             return rejectWithValue(error)

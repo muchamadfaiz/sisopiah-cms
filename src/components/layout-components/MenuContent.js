@@ -53,7 +53,10 @@ const SideNavContent = (props) => {
       if (localStorage.getItem('token')) {
         const token = localStorage.getItem('token');
         const decoded = jwt_decode(token);
-        setRole(decoded.role_id)
+         console.log("Decoded token:", decoded); // <-- ini buat cek seluruh isi token
+      console.log("Role from token:", decoded.role_id); // <-- ini buat pastikan role-nya
+        // setRole(decoded.role_id)
+        setRole(1) //next ganti ini ambil dari api
       }
     } catch (err) {
       console.log({ err })
@@ -100,7 +103,8 @@ const SideNavContent = (props) => {
                   ))}
                 </SubMenu>
               ) : (
-                subMenuFirst.access?.includes(role) && (<Menu.Item key={subMenuFirst.key} style={MenuStyle}>
+                subMenuFirst.access?.includes(role) && 
+                (<Menu.Item key={subMenuFirst.key} style={MenuStyle}>
                   {subMenuFirst.icon ? <Icon component={subMenuFirst.icon} /> : null}
                   <span style={titleStyle}>{setLocale(localization, subMenuFirst.title)}</span>
                   <Link onClick={() => closeMobileNav()} to={subMenuFirst.path} />
@@ -110,7 +114,8 @@ const SideNavContent = (props) => {
             )}
           </Menu.ItemGroup>
         ) : (
-          menu.access.includes(role) && (<Menu.Item key={menu.key} style={MenuStyle}>
+          menu.access.includes(role) && 
+          (<Menu.Item key={menu.key} style={MenuStyle}>
             {menu.icon ? <Icon component={menu?.icon} /> : null}
             <span style={titleStyle}>{setLocale(localization, menu?.title)}</span>
             {menu.path ? <Link onClick={() => closeMobileNav()} to={menu.path} /> : null}

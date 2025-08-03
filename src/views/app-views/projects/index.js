@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { deleteDapur, fetchAllDapurs } from "redux/features/dapur";
+import { deleteStudent, fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -252,7 +252,7 @@ const getColumns = () => [
   const getData = async (params) => {
     try {
     //   setLoading(true);
-      const response = await dispatch(fetchAllDapurs(params)).unwrap();
+      const response = await dispatch(fetchAllStudents(params)).unwrap();
       console.log('hahai: ', response.data)
     //   setData(response.data.Projects);
       setData(response.data);
@@ -315,7 +315,7 @@ const getColumns = () => [
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
-        await dispatch(deleteDapur(id));
+        await dispatch(deleteStudent(id));
         getData(filters);
       },
       onCancel: () => { },

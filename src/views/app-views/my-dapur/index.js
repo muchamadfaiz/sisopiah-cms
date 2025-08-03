@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { deleteDapur, fetchAllDapurs } from "redux/features/dapur";
+import { deleteStudent, fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -231,7 +231,7 @@ export const MYPROJECTS = () => {
     try {
           console.log("Params API:", params); // Tambahkan log ini
       //   setLoading(true);
-      const response = await dispatch(fetchAllDapurs({ ...params, regency: kabupaten })).unwrap();
+      const response = await dispatch(fetchAllStudents({ ...params })).unwrap();
       console.log('hahai: ', response.data)
       //   setData(response.data.Projects);
       setData(response.data);
@@ -294,7 +294,7 @@ export const MYPROJECTS = () => {
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
-        await dispatch(deleteDapur(id));
+        await dispatch(deleteStudent(id));
         getData(filters);
       },
       onCancel: () => { },
@@ -357,7 +357,7 @@ useEffect(() => {
           <Card>
             <Row gutter={[6, 6]}>
               <Col md={8} xl={8} sm={24} >
-                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Judul Proyek" allowClear />
+                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Murid" allowClear />
               </Col>
               <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchKabupaten} name="kabupaten" placeholder="Kota/Kabupaten" allowClear />

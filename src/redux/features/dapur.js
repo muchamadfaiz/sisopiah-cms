@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import URLS from "redux/urls";
-import request2 from "redux/utils/request2";
+import request from "redux/utils/request";
 
 export const fetchAllDapurs = createAsyncThunk("Dapur/fetchAllDapurs", async (params, { rejectWithValue }) => {
  try {
-  const response = await request2("get", URLS.DAPUR, params);
+  const response = await request("get", URLS.DAPUR, params);
   return response;
  } catch (error) {
   return rejectWithValue(error);
@@ -13,7 +13,7 @@ export const fetchAllDapurs = createAsyncThunk("Dapur/fetchAllDapurs", async (pa
 
 export const fetchDapurSummary = createAsyncThunk("Dapur/fetchDapurSummary", async (params, { rejectWithValue }) => {
  try {
-  const response = await request2("get", `${URLS.DAPUR}/summary`, params);
+  const response = await request("get", `${URLS.DAPUR}/summary`, params);
   return response;
  } catch (error) {
   return rejectWithValue(error);
@@ -24,7 +24,7 @@ export const fetchRankingCompany = createAsyncThunk(
  "Dapur/fetchRankingCompany",
  async (params, { rejectWithValue }) => {
   try {
-   const response = await request2("get", `${URLS.DAPUR}/get-ranking-companies`, params);
+   const response = await request("get", `${URLS.DAPUR}/get-ranking-companies`, params);
    return response;
   } catch (error) {
    return rejectWithValue(error);
@@ -34,7 +34,7 @@ export const fetchRankingCompany = createAsyncThunk(
 
 export const addDapur = createAsyncThunk("Dapur/addDapur", async (payload, { rejectWithValue }) => {
  try {
-  const response = await request2("post", URLS.DAPUR, payload);
+  const response = await request("post", URLS.DAPUR, payload);
   return response;
  } catch (error) {
   return rejectWithValue(error);
@@ -43,7 +43,7 @@ export const addDapur = createAsyncThunk("Dapur/addDapur", async (payload, { rej
 
 export const updateDapur = createAsyncThunk("Dapur/updateDapur", async (payload, { rejectWithValue }) => {
  try {
-  const response = await request2("patch", `${URLS.DAPUR}/${payload.id}`, payload);
+  const response = await request("patch", `${URLS.DAPUR}/${payload.id}`, payload);
   return response;
  } catch (error) {
   return rejectWithValue(error);
@@ -51,7 +51,7 @@ export const updateDapur = createAsyncThunk("Dapur/updateDapur", async (payload,
 });
 export const fetchOneDapur = createAsyncThunk("Dapur/fetchOneDapur", async (id, { rejectWithValue }) => {
  try {
-  const response = await request2("get", `${URLS.DAPUR}/${id}`);
+  const response = await request("get", `${URLS.DAPUR}/${id}`);
   return response;
  } catch (error) {
   return rejectWithValue(error);
@@ -60,7 +60,7 @@ export const fetchOneDapur = createAsyncThunk("Dapur/fetchOneDapur", async (id, 
 
 export const deleteDapur = createAsyncThunk("Dapur/deleteDapur", async (id, { rejectWithValue }) => {
  try {
-  const response = await request2("delete", `${URLS.DAPUR}/${id}`);
+  const response = await request("delete", `${URLS.DAPUR}/${id}`);
   return response;
  } catch (error) {
   return rejectWithValue(error);

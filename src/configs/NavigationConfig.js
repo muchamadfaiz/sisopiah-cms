@@ -20,50 +20,50 @@ const dashBoardNavTree = [{
       submenu: []
     },
     {
-      key: "Dapur Saya",
-      path: strings.navigation.path.my_dapur,
-      title: "Dapur Saya",
-      icon: FileOutlined,
-      breadcrumb: false,
-      access: my_projects_privileges,
-      submenu: []
-    },
-    {
-      key: "Dapur Diajukan",
-      path: strings.navigation.path.proyek_opd,
-      title: "Dapur Diajukan",
+      key: "Murid",
+      path: strings.navigation.path.student,
+      title: "Murid",
       icon: BuildOutlined,
       breadcrumb: false,
       access: admin_privileges,
       submenu: []
     },
     {
-      key: "Dapur Terverifikasi",
+      key: "Wali Murid",
+      path: strings.navigation.path.murid,
+      title: "Wali Murid",
+      icon: FileOutlined,
+      breadcrumb: false,
+      access: admin_privileges,
+      submenu: []
+    },
+    {
+      key: "Tagihan",
       path: strings.navigation.path.finished_projects,
-      title: "Dapur Terverifikasi",
+      title: "Tagihan",
       icon: CheckCircleOutlined,
       breadcrumb: false,
       access: admin_privileges,
       submenu: []
     },
-    {
-      key: "Verifikasi Dapur",
-      path: strings.navigation.path.verification_projects,
-      title: "Verifikasi Dapur",
-      icon: DatabaseOutlined,
-      breadcrumb: false,
-      access: admin_privileges,
-      submenu: []
-    },
-    {
-      key: "Semua Dapur",
-      path: strings.navigation.path.projects,
-      title: "Semua Dapur",
-      icon: AimOutlined,
-      breadcrumb: false,
-      access: admin_privileges,
-      submenu: []
-    },
+    // {
+    //   key: "Verifikasi Dapur",
+    //   path: strings.navigation.path.verification_projects,
+    //   title: "Verifikasi Dapur",
+    //   icon: DatabaseOutlined,
+    //   breadcrumb: false,
+    //   access: admin_privileges,
+    //   submenu: []
+    // },
+    // {
+    //   key: "Semua Dapur",
+    //   path: strings.navigation.path.projects,
+    //   title: "Semua Dapur",
+    //   icon: AimOutlined,
+    //   breadcrumb: false,
+    //   access: admin_privileges,
+    //   submenu: []
+    // },
     // {
     //   key: "Instansi",
     //   path: strings.navigation.path.wajib_pajak,
@@ -79,7 +79,7 @@ const dashBoardNavTree = [{
       title: "Pengguna",
       icon: UserOutlined,
       access: admin_privileges,
-      breadcrumb: false,
+    //   breadcrumb: false,
       submenu: []
     },
   ]
@@ -88,7 +88,7 @@ const dashBoardNavTree = [{
 const ControlTree = [{
   key: "Pengaturan",
   path: strings.navigation.path.settings,
-  title: "Pengaturan",
+  title: "Pengaturan Cui",
   breadcrumb: false,
   submenu: [
     {

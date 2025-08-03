@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import URLS from 'redux/urls'
 import request from 'redux/utils/publicRequest'
-import privateRequest from 'redux/utils/request2'
+import privateRequest from 'redux/utils/request'
 
 const AUTH_TOKEN = 'auth_token'
 
