@@ -88,7 +88,7 @@ const dashBoardNavTree = [{
 const ControlTree = [{
   key: "Pengaturan",
   path: strings.navigation.path.settings,
-  title: "Pengaturan Cui",
+  title: "Pengaturan",
   breadcrumb: false,
   submenu: [
     {

@@ -324,11 +324,11 @@ export const GUARDIAN = () => {
           <Card>
             <Row gutter={[6, 6]}>
               <Col md={8} xl={8} sm={24} >
-                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Murid" allowClear/>
+                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Wali Murid" allowClear/>
               </Col>
-              <Col md={4} xl={4} sm={24} >
+              {/* <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchKabupaten} name="guardians" placeholder="Wali Murid" allowClear/>
-              </Col>
+              </Col> */}
               {/* <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchByOPD} name="opd" placeholder="OPD"></Input>
               </Col>

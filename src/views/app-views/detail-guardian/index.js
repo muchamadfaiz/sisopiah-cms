@@ -18,7 +18,7 @@ import {
 import { MyEditor } from "../../../components/Editor";
 import moment from "moment";
 import { addStudent, fetchOneStudent, updateStudent } from "redux/features/students";
-import { fetchOneGuardian } from "redux/features/guardians";
+import { addGuardian, fetchOneGuardian, updateGuardian } from "redux/features/guardians";
 
 const selectStyle = {
   width: "100%",
@@ -53,28 +53,6 @@ export const DETAIL_GUARDIAN= () => {
   const [opd, setOpd] = useState("");
   const [kategori, setKategori] = useState("");
   const [sdg, setSdg] = useState("");
-
-  const kabupatens = [
-  { "label": "SUMATERA SELATAN", "value": "SUMATERA SELATAN" },
-  { "label": "BANYUASIN", "value": "BANYUASIN" },
-  { "label": "EMPAT LAWANG", "value": "EMPAT LAWANG" },
-  { "label": "LAHAT", "value": "LAHAT" },
-  { "label": "MUARA ENIM", "value": "MUARA ENIM" },
-  { "label": "MUSI BANYUASIN", "value": "MUSI BANYUASIN" },
-  { "label": "MUSI RAWAS", "value": "MUSI RAWAS" },
-  { "label": "MUSI RAWAS UTARA", "value": "MUSI RAWAS UTARA" },
-  { "label": "OGAN ILIR", "value": "OGAN ILIR" },
-  { "label": "OGAN KOMERING ILIR", "value": "OGAN KOMERING ILIR" },
-  { "label": "OGAN KOMERING ULU", "value": "OGAN KOMERING ULU" },
-  { "label": "OGAN KOMERING ULU SELATAN", "value": "OGAN KOMERING ULU SELATAN" },
-  { "label": "OGAN KOMERING ULU TIMUR", "value": "OGAN KOMERING ULU TIMUR" },
-  { "label": "PENUKAL ABAB LEMATANG ILIR", "value": "PENUKAL ABAB LEMATANG ILIR" },
-  { "label": "LUBUKLINGGAU", "value": "LUBUKLINGGAU" },
-  { "label": "PAGAR ALAM", "value": "PAGAR ALAM" },
-  { "label": "PALEMBANG", "value": "PALEMBANG" },
-  { "label": "PRABUMULIH", "value": "PRABUMULIH" },
-  { "label": "LAINNYA", "value": "LAINNYA" },
-]
 
   const onFinish = (values) => {
     if (location?.state?.id) {
@@ -124,7 +102,7 @@ export const DETAIL_GUARDIAN= () => {
 
   const createData = async (values) => {
     try {
-      await dispatch(addStudent({
+      await dispatch(addGuardian({
         ...values,
         // name: values.name.toUpperCase(),
         // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
@@ -156,11 +134,11 @@ export const DETAIL_GUARDIAN= () => {
         // nilai_sroi: parseInt(values.nilai_sroi) || 0,
         // kebutuhan: kebutuhan,
       })).unwrap();
-      if (role === 1) {
-        history.push("/app/my-projects");
-        } else {
-        history.push("/app/my-dapur");
-        }
+    //   if (role === 1) {
+    //     history.push("/app/my-projects");
+    //     } else {
+        history.push("/app/wali-murid");
+        // }
 
     } catch (error) {
       message.error(error.message || "Ada yang salah dengan data anda! Pastikan semua nilai terisi, jika tidak ada isikan dengan nilai '-'");
@@ -185,7 +163,7 @@ export const DETAIL_GUARDIAN= () => {
 
   const updateData = async (values) => {
     try {
-      await dispatch(updateStudent({
+      await dispatch(updateGuardian({
         ...values,
         // name: values.name.toUpperCase(),
         // id: location?.state?.id,
@@ -219,13 +197,13 @@ export const DETAIL_GUARDIAN= () => {
         // nilai_diskon_pajak: (role === 1 || role === 6) ? parseInt(values.nilai_diskon_pajak) : 0,
         // kebutuhan: kebutuhan,
       })).unwrap();
-      if (role === 3) {
-        history.push("/app/projects-opd");
-      } else if (role === 1) {
-        history.push("/app/projects");
-      } else {
-        history.push("/app/my-dapur");
-      }
+    //   if (role === 3) {
+    //     history.push("/app/projects-opd");
+    //   } else if (role === 1) {
+    //     history.push("/app/projects");
+    //   } else {
+        history.push("/app/wali-murid");
+    //   }
     } catch (error) {
       message.error(error?.message || "Failed to fetch data");
     }
@@ -292,9 +270,9 @@ export const DETAIL_GUARDIAN= () => {
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
           {/* <h2>Tambah/Update Proyek Baru {perusahaan} Kode {role}</h2> */}
-          <h2>Tambah/Update dapur BGN baru</h2>
+          <h2>Tambah/Update wali murid baru</h2>
           {/* <p>Tolong isi proyek baru di form ini sesuai dengan data</p> */}
-          <p>Tolong isi dapur BGN baru di form ini sesuai dengan data</p>
+          <p>Tolong isi wali murid baru di form ini sesuai dengan data</p>
         </Col>
       </Row>
       <Row>

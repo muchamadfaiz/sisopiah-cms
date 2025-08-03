@@ -1,12 +1,24 @@
-import { Col, Row, Select, message } from 'antd';
+import { Col, Row, Select, message, Typography, Divider } from 'antd';
 import React, { useEffect, useState } from "react";
 import { Button, Card, Form, Input, InputNumber } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addUser, fetchOneUser, updateUser } from 'redux/features/user';
-import { fetchOneWajib } from 'redux/features/wajib_pajak';
 import { getUserProfile } from "redux/features/auth";
 import Password from 'antd/lib/input/Password';
+
+const roleOptions = [
+  { label: "Admin", value: 1 },
+  { label: "Staff", value: 2 },
+  { label: "Guru", value: 3 },
+  { label: "Siswa", value: 4 },
+  { label: "Wali", value: 5 },
+];
+
+const statusOptions = [
+  { label: "Aktif", value: true },
+  { label: "Tidak Aktif", value: false }
+];
 
 export const SETTINGS = () => {
 
@@ -23,13 +35,13 @@ export const SETTINGS = () => {
   const getProfile = async () => {
     try {
       const response = await dispatch(getUserProfile()).unwrap();
+       console.log("User profile dari token:", response.data); // 👈 Tambahkan ini
       form.setFieldsValue({
         ...response.data.user
       });
-      setUserId(response.data.user.id)
-      getDataById(response.data.user.id)
-      setRole(response.data.user.role_id)
-      setCompany(response.data.user.perusahaan)
+      setUserId(response.data.id)
+      getDataById(response.data.id)
+    //   setRole(response.data.user.role_id)
     } catch (error) {
       message.error(error?.message || "Failed to fetch data");
     }
@@ -64,7 +76,7 @@ export const SETTINGS = () => {
         id: user_id, 
         password: values.password && values.confirm_password ? values.password : undefined
       })).unwrap()
-      // history.push("/app/users")
+      history.push("/app/users")
       message.success("Data anda berhasil diubah!")
     } catch (error) {
       message.error(error?.message || 'Failed to fetch data')
@@ -91,96 +103,138 @@ export const SETTINGS = () => {
     getProfile()
   }, [])
 
+  const layout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+      md: { span: 6 },
+      lg: { span: 5 },
+      xl: { span: 4 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+      md: { span: 18 },
+      lg: { span: 19 },
+      xl: { span: 20 },
+    },
+  };
+
   return (
-    <>
-      <Row gutter={24}>
-        <Col xs={24} sm={24} md={24} lg={24}>
-          <h2>Pengaturan</h2>
-          <p>Reset password kamu sesuai kebutuhan</p>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={24} sm={24} md={24} lg={24}>
-          <Card>
-            <Form
-              name="basic"
-              onFinish={onFinish}
-              form={form}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Username"
-                name="username"
+      <>
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={24} lg={24}>
+            <h2>Tambah/Update Data Pengguna</h2>
+            <p>Tolong isikan data sesuai dengan data pengguna</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={24} md={24} lg={24}>
+            <Card>
+              <Form
+                name="basic"
+                form={form}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                labelAlign="right"
+                {...layout}
               >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Email"
-                name="email"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Nomor WA"
-                name="no_phone"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Kabupaten"
-                name="kabupaten"
-              >
-                <Input disabled />
-              </Form.Item>
-{/* 
-              <Form.Item
-                label="OPD"
-                name="opd"
-              >
-                <Input disabled />
-              </Form.Item> */}
-
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Masukkan password anda untuk mengubah data!',
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-                label="Confirm Password"
-                name="confirm_password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Konfirmasi password anda untuk mengubah data!',
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-
-              >
-                <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
-                  Update
-                </Button>
-              </Form.Item>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
-    </>
-  )
-}
+              <Typography.Title level={5}>Profil Pengguna</Typography.Title>
+  
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your username!',
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+  
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your email!',
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+  
+                <Form.Item
+                  label="No HP"
+                  name="no_phone"
+                >
+                  <Input />
+                </Form.Item>
+  
+                <Form.Item
+                  label="Role"
+                  name="role_id"
+                  rules={[{ required: true, message: 'Please select a role!' }]}
+                  >
+                  <Select placeholder="Pilih Role" options={roleOptions} />
+                </Form.Item>
+  
+                 <Divider />
+                <Form.Item>
+                  <Typography.Title level={5}>Keamanan Pengguna</Typography.Title>
+                </Form.Item>
+  
+                <Form.Item
+                  label="Password"
+                  name="password"
+                >
+                  <Password />
+                </Form.Item>
+  
+                <Form.Item
+                  label="Confirm Password"
+                  name="confirm_password"
+                  dependencies={["password"]}
+                  rules={[
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error("Konfirmasi password tidak cocok!")
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+  
+                <Form.Item
+                  label="Status"
+                  name="is_active"
+                  rules={[{ required: true, message: 'Please select a status!' }]}
+                  >
+                  <Select placeholder="Pilih Status" options={statusOptions} />
+                </Form.Item>
+  
+  
+                <Form.Item wrapperCol={24}>
+                  <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+        </Row>
+      </>
+    )
+  }
 
 export default SETTINGS

@@ -1,4 +1,4 @@
-import { Col, Row, message, Tabs, DatePicker, InputNumber } from "antd";
+import { Col, Row, message, Typography, Divider, Tabs, DatePicker, InputNumber } from "antd";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Form, Input } from "antd";
 import { useDispatch } from "react-redux";
@@ -31,6 +31,11 @@ const rules = [
   },
 ];
 
+const genderOptions = [
+  { label: "Laki-laki", value: "L" },
+  { label: "Perempuan", value: "P" },
+];
+
 export const DETAIL_STUDENT = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -47,28 +52,6 @@ export const DETAIL_STUDENT = () => {
   const [opd, setOpd] = useState("");
   const [kategori, setKategori] = useState("");
   const [sdg, setSdg] = useState("");
-
-  const kabupatens = [
-  { "label": "SUMATERA SELATAN", "value": "SUMATERA SELATAN" },
-  { "label": "BANYUASIN", "value": "BANYUASIN" },
-  { "label": "EMPAT LAWANG", "value": "EMPAT LAWANG" },
-  { "label": "LAHAT", "value": "LAHAT" },
-  { "label": "MUARA ENIM", "value": "MUARA ENIM" },
-  { "label": "MUSI BANYUASIN", "value": "MUSI BANYUASIN" },
-  { "label": "MUSI RAWAS", "value": "MUSI RAWAS" },
-  { "label": "MUSI RAWAS UTARA", "value": "MUSI RAWAS UTARA" },
-  { "label": "OGAN ILIR", "value": "OGAN ILIR" },
-  { "label": "OGAN KOMERING ILIR", "value": "OGAN KOMERING ILIR" },
-  { "label": "OGAN KOMERING ULU", "value": "OGAN KOMERING ULU" },
-  { "label": "OGAN KOMERING ULU SELATAN", "value": "OGAN KOMERING ULU SELATAN" },
-  { "label": "OGAN KOMERING ULU TIMUR", "value": "OGAN KOMERING ULU TIMUR" },
-  { "label": "PENUKAL ABAB LEMATANG ILIR", "value": "PENUKAL ABAB LEMATANG ILIR" },
-  { "label": "LUBUKLINGGAU", "value": "LUBUKLINGGAU" },
-  { "label": "PAGAR ALAM", "value": "PAGAR ALAM" },
-  { "label": "PALEMBANG", "value": "PALEMBANG" },
-  { "label": "PRABUMULIH", "value": "PRABUMULIH" },
-  { "label": "LAINNYA", "value": "LAINNYA" },
-]
 
   const onFinish = (values) => {
     if (location?.state?.id) {
@@ -235,7 +218,8 @@ export const DETAIL_STUDENT = () => {
       const student = res.data
       form.setFieldsValue({
         ...student,
-        birth_date: moment(student.birth_date).format("YYYY-MM-DD") || "-",
+        // birth_date: moment(student.birth_date).format("YYYY-MM-DD") || "-",
+        birth_date: student.birth_date ? moment(student.birth_date) : null,
         guardian: student.guardians?.[0]?.guardian?.name || "-",
       });
     } catch (err) {
@@ -270,14 +254,31 @@ export const DETAIL_STUDENT = () => {
     // getAllCompanies()
   }, []);
 
+  const layout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+      md: { span: 6 },
+      lg: { span: 5 },
+      xl: { span: 4 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+      md: { span: 18 },
+      lg: { span: 19 },
+      xl: { span: 20 },
+    },
+  };
+
   return (
     <>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
           {/* <h2>Tambah/Update Proyek Baru {perusahaan} Kode {role}</h2> */}
-          <h2>Tambah/Update dapur BGN baru</h2>
+          <h2>Tambah/Update murid baru</h2>
           {/* <p>Tolong isi proyek baru di form ini sesuai dengan data</p> */}
-          <p>Tolong isi dapur BGN baru di form ini sesuai dengan data</p>
+          <p>Tolong isi murid baru di form ini sesuai dengan data</p>
         </Col>
       </Row>
       <Row>
@@ -289,7 +290,10 @@ export const DETAIL_STUDENT = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
+              labelAlign="right"
+              {...layout}
             >
+                <Typography.Title level={5}>Profil Murid</Typography.Title>
               <Form.Item
                 label="Nama Murid"
                 name="name"
@@ -307,15 +311,17 @@ export const DETAIL_STUDENT = () => {
               <Form.Item
                 label="Gender"
                 name="gender"
+                rules={[{ required: true, message: 'Please select a gender!' }]}
               >
-                <Input />
+                <Select placeholder="Pilih Gender" options={genderOptions} />
               </Form.Item>
 
               <Form.Item
                 label="Tanggal Lahir"
                 name="birth_date"
               >
-                <Input />
+                {/* <Input /> */}
+                <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
               </Form.Item>
 
               <Form.Item

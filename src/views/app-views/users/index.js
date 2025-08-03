@@ -1,4 +1,4 @@
-import { Button, Card, Col, message, Row, Table, Input, Modal } from 'antd';
+import { Button, Card, Col, message, Row, Table, Input, Modal, Tag } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory, withRouter } from 'react-router-dom';
@@ -47,11 +47,33 @@ export const USERS = () => {
 
     const [filters, setFilters] = useState({
         page: 1,
-        limit: 1000
+        limit: 10
       });
 
+    const roleColorMap = {
+        1: "red",
+        2: "blue",
+        3: "green",
+        4: "orange",
+        5: "purple",
+    };
+
+
+    const roleNameMap = {
+        1: "Admin",
+        2: "Staff",
+        3: "Guru",
+        4: "Siswa",
+        5: "Wali",
+    };
+
+    const statusColorMap = {
+        true: "green",
+        false: "red",
+    };
+
     const tableColumns = [
-   {
+    {
       title: "No",
       dataIndex: "no",
       key: "no",
@@ -74,14 +96,14 @@ export const USERS = () => {
     //     key: 'opd',
     // },
     {
-        title: 'Kabupaten',
-        dataIndex: 'regency',
-        key: 'regency',
-    },
-    {
         title: 'Role',
         dataIndex: 'role_id',
         key: 'role_id',
+        render: (roleId) => {
+            const roleName = roleNameMap[roleId] || "Tidak Diketahui";
+            const color = roleColorMap[roleId] || "default";
+            return <Tag color={color}>{roleName}</Tag>;
+            }
     },
     // {
     //     title: 'Instansi',
@@ -97,6 +119,18 @@ export const USERS = () => {
         title: 'No Phone',
         dataIndex: 'no_phone',
         key: 'no_phone',
+        render: (text) => <div>{text || '-'}</div>,
+    },
+    {
+        title: 'Status Akun',
+        dataIndex: 'is_active',
+        key: 'is_active',
+        render: (_, record) => {
+            const statusName = record.is_active ? "Aktif" : "Tidak Aktif";
+            const color = statusColorMap[record.is_active] || "default";
+            return <Tag color={color}>{statusName}</Tag>;
+        }
+            
     },
     {
         title: () => <div className="text-center">Detail</div>,
@@ -169,7 +203,7 @@ export const USERS = () => {
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={24} lg={24}>
                     <Card>
-                        <Input placeholder='Search By Email' ></Input>
+                        <Input placeholder='Search By Username' ></Input>
                         <Table
                             className="no-border-last"
                             columns={tableColumns}
@@ -177,9 +211,16 @@ export const USERS = () => {
                             dataSource={data}
                             rowKey='id'
                             pagination={{
-                                defaultPageSize: 10,
-                                defaultCurrent: 1,
-                                total: metaData.total_data,
+                                pageSize: filters.limit,
+                                current: filters.page,
+                                total: metaData.total,
+                                onChange: (page, pageSize) => {
+                                setFilters(prev => ({
+                                    ...prev,
+                                    page,
+                                    limit: pageSize,
+                                }));
+                                },
                             }}
                         />
                     </Card>

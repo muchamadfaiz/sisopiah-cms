@@ -5,8 +5,9 @@ export const strings = {
   tomorrow: moment().add(1, "days").tz("Asia/Jakarta").format("YYYY-MM-DD"),
   token: localStorage.getItem("token"),
   api: {
-    host: "http://103.197.190.74:3001/api/v1", //localhost hanya sementara,ganti ke domain yg sesuai
-    // host2: "http://103.197.190.74:3001/api/v1",
+    // host: "http://103.197.190.74:3001/api/v1", //localhost hanya sementara,ganti ke domain yg sesuai
+    // host: "http://localhost:3001/api/v1", //localhost hanya sementara,ganti ke domain yg sesuai
+    host: "https://api.yayasansopiah.site/api/v1", //domain api server
     storage: "https://storage.sumselprov.info/upload",
     HEADER_KEY: "mantapjiwa",
     JWT_KEY: "Aj1257Xi202",
