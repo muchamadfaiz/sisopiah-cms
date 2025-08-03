@@ -13,7 +13,7 @@ import USERS from "./users";
 import PROJECTS from "./projects";
 import MY_DAPUR from "./my-dapur";
 import OPEN_PROJECTS from "./open-projects";
-import MURID from "./murid";
+import MURID, { STUDENT } from "./student";
 import FINISHED_PROJECTS from "./finished-projects";
 import VERIFICATION_PROJECTS from "./verification-projects";
 import VENDORS from "./vendors";
@@ -30,7 +30,7 @@ import DETAIL_PROJECT_VERIFICATION_PROECESS from "./detail-project-verification-
 import AMBIL_PROJECT from "./ambil-project";
 import DETAIL_WAJIB from "./detail-wajib";
 import DETAIL_USER from "./detail-user";
-import DETAIL_PROJECT, { DETAIL_MURID } from "./detail-murid";
+import DETAIL_MURID, { DETAIL_STUDENT } from "./detail-student";
 import DETAIL_PROJECT_READ_ONLY from "./detail-project-read-only";
 import DETAIL_PROJECT_OPD from "./detail-project-opd";
 import DETAIL_TAG from "./detail-tag";
@@ -40,6 +40,8 @@ import SETTINGS from "./settings";
 import { TAGS } from "./tags";
 import TARGET from "./static/target";
 import jwt_decode from 'jwt-decode'
+import { GUARDIAN, WALI_MURID } from "./guardian";
+import DETAIL_GUARDIAN from "./detail-guardian";
 
 export const AppViews = ({ match }) => {
 
@@ -90,7 +92,13 @@ export const AppViews = ({ match }) => {
           privileges={all_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.student}`}
-          component={MURID}
+          component={STUDENT}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.guardian}`}
+          component={GUARDIAN}
         />
         {/* <PrivateRoute
           privileges={all_privileges}
@@ -187,8 +195,14 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_murid}`}
-          component={DETAIL_MURID}
+          path={`${strings.navigation.path.detail_student}`}
+          component={DETAIL_STUDENT}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.detail_guardian}`}
+          component={DETAIL_GUARDIAN}
         />
         <PrivateRoute
           privileges={all_privileges}

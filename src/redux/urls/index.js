@@ -15,7 +15,8 @@ const URLS = Object.freeze({
   CATEGORIZATION: "/categorization",
   TAG: "/tag",
   SUBCATEGORY: "/sub_categories",
-  STUDENT:"/students"
+  STUDENT:"/students",
+  GUARDIAN:"/guardians"
 });
 
 export default URLS;

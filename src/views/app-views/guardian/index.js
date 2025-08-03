@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { fetchAllDapurs, fetchAllStudents } from "redux/features/students";
+import { fetchAllGuardians } from "redux/features/guardians";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -39,7 +39,7 @@ const LocalizedModal = () => {
   );
 }
 
-export const MURID = () => {
+export const GUARDIAN = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
@@ -82,46 +82,46 @@ export const MURID = () => {
         (filters.page - 1) * filters.limit + index + 1,
     },
     {
-      title: "NIS",
-      dataIndex: "nis",
-      key: "nis",
-    },
-    {
       title: "Name",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
-      render: (gender) => genderMap[gender] || "-"
+      title: "No Hp",
+      dataIndex: "phone",
+      key: "phone",
     },
-    {
-      title: "Tanggal Lahir",
-      dataIndex: "birth_date",
-      key: "birth_date",
-      render: (text) => moment(text).format("DD-MM-YYYY"),
-    },
-    {
-      title: "Kelas",
-      dataIndex: "class",
-      key: "class",
-    },
+    // {
+    //   title: "Gender",
+    //   dataIndex: "gender",
+    //   key: "gender",
+    //   render: (gender) => genderMap[gender] || "-"
+    // },
+    // {
+    //   title: "Tanggal Lahir",
+    //   dataIndex: "birth_date",
+    //   key: "birth_date",
+    //   render: (text) => moment(text).format("DD-MM-YYYY"),
+    // },
+    // {
+    //   title: "Kelas",
+    //   dataIndex: "class",
+    //   key: "class",
+    // },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
     },
-    {
-      title: "Wali Murid",
-      dataIndex: "guardians",
-      key: "guardians",
-      render: (_, record) => {
-        const guardian = record.guardians?.[0]?.guardian
-        return guardian ? guardian.name : "-"
-        }
-    },
+    // {
+    //   title: "Wali Murid",
+    //   dataIndex: "guardians",
+    //   key: "guardians",
+    //   render: (_, record) => {
+    //     const guardian = record.guardians?.[0]?.guardian
+    //     return guardian ? guardian.name : "-"
+    //     }
+    // },
     // {
     //   title: "Legalitas",
     //   dataIndex: "legality",
@@ -183,13 +183,13 @@ export const MURID = () => {
                 onClick={() => {
                   // confirm(record?.id);
                   history.push({
-                    pathname: `${strings.navigation.path.ambil_project}`,
+                    pathname: `${strings.navigation.path.detail_guardian}`,
                     state: record,
                   });
                 }}
               >
                 {/* Lihat Dapur */}
-                Detail Murid
+                Detail Wali Murid
               </Button>
             </div>
           )
@@ -219,7 +219,7 @@ export const MURID = () => {
   const getData = async (params) => {
     try {
     //   setLoading(true);
-      const response = await dispatch(fetchAllStudents(params)).unwrap();
+      const response = await dispatch(fetchAllGuardians(params)).unwrap();
       console.log('hahai: ', response.data)
     //   setData(response.data.Projects);
       setData(response.data);
@@ -315,8 +315,8 @@ export const MURID = () => {
       <LocalizedModal></LocalizedModal>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
-          <h2>Murid di SiSopiah</h2>
-          <p>Daftar semua murid di SiSopiah</p>
+          <h2>Wali Murid di SiSopiah</h2>
+          <p>Daftar semua wali muirid di SiSopiah</p>
         </Col>
       </Row>
       <Row gutter={24}>
@@ -364,12 +364,12 @@ export const MURID = () => {
             htmlType="submit"
             onClick={() => {
               history.push({
-                pathname: `${strings.navigation.path.detail_murid}`,
+                pathname: `${strings.navigation.path.detail_guardian}`,
               });
             }}
             block
           >
-            Tambahkan Murid
+            Tambahkan Wali Murid
           </Button>
         </Col>
       </Row>
@@ -378,4 +378,4 @@ export const MURID = () => {
   );
 };
 
-export default withRouter(MURID);
+export default withRouter(GUARDIAN);

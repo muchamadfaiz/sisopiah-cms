@@ -30,7 +30,7 @@ const dashBoardNavTree = [{
     },
     {
       key: "Wali Murid",
-      path: strings.navigation.path.murid,
+      path: strings.navigation.path.guardian,
       title: "Wali Murid",
       icon: FileOutlined,
       breadcrumb: false,

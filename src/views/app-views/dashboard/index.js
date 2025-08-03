@@ -10,7 +10,7 @@ import { kabupatens, opds, categories, sdgs } from '../../../constants/DataConst
 import { getUserProfile } from "redux/features/auth";
 import { PROJECTS } from "../projects";
 import Map from "../../../components/Maps";
-import OPD_PROJECTS from "../murid";
+import OPD_PROJECTS from "../student";
 import VerificationProjects from "../verification-projects";
 import { MYPROJECTS } from "../my-projects";
 

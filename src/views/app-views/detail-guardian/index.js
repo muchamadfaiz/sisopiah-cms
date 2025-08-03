@@ -18,6 +18,7 @@ import {
 import { MyEditor } from "../../../components/Editor";
 import moment from "moment";
 import { addStudent, fetchOneStudent, updateStudent } from "redux/features/students";
+import { fetchOneGuardian } from "redux/features/guardians";
 
 const selectStyle = {
   width: "100%",
@@ -31,7 +32,7 @@ const rules = [
   },
 ];
 
-export const DETAIL_MURID = () => {
+export const DETAIL_GUARDIAN= () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
@@ -236,7 +237,7 @@ export const DETAIL_MURID = () => {
 
   const getDataById = async (id) => {
     try {
-      const data = await dispatch(fetchOneStudent(id)).unwrap();
+      const data = await dispatch(fetchOneGuardian(id)).unwrap();
       setMarkerLocation({
         latitude: parseFloat(data.data.latitude),
         longitude: parseFloat(data.data.longitude),
@@ -280,10 +281,10 @@ export const DETAIL_MURID = () => {
       getDataById(location?.state?.id);
 
     }
-    getSubcategories();
-    getTags();
-    getProfile()
-    getAllCompanies()
+    // getSubcategories();
+    // getTags();
+    // getProfile()
+    // getAllCompanies()
   }, []);
 
   return (
@@ -307,49 +308,15 @@ export const DETAIL_MURID = () => {
               autoComplete="off"
             >
               <Form.Item
-                label="Nama Proyek"
+                label="Nama Wali Murid"
                 name="name"
               >
                 <Input />
               </Form.Item>
 
               <Form.Item
-                label="Layout"
-                name="layout"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Foto"
-                name="photo"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Kabupaten"
-                name="regency"
-                rules={[
-                {
-                required: true,
-                message: 'Please select city!',
-                },
-                ]}
-                >
-                <Select options={kabupatens} />
-              </Form.Item>
-
-              <Form.Item
-                label="Kecamatan"
-                name="district"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Kelurahan"
-                name="sub_district"
+                label="No Hp"
+                name="phone"
               >
                 <Input />
               </Form.Item>
@@ -357,69 +324,6 @@ export const DETAIL_MURID = () => {
               <Form.Item
                 label="Alamat"
                 name="address"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="No Phone"
-                name="phone_number"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="PIC"
-                name="pic"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Legalitas"
-                name="legality"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Video"
-                name="access_video"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Proposal"
-                name="proposal_link"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Map"
-                name="link_gmap"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Gdrive"
-                name="link_gdrive"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Latitude"
-                name="latitude"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Longitude"
-                name="longitude"
               >
                 <Input />
               </Form.Item>
@@ -450,7 +354,7 @@ export const DETAIL_MURID = () => {
                 <Input defaultValue={'-'} />
               </Form.Item> */}
 
-              {(location?.state?.id) ? (
+              {/* {(location?.state?.id) ? (
                 <Card>
                   {((markerLocation.latitude && markerLocation.longitude) && (
                     <Map latitude={markerLocation.latitude} longitude={markerLocation.longitude} onMarkerChange={handleLocationChange}></Map>
@@ -460,7 +364,7 @@ export const DETAIL_MURID = () => {
                 <Card>
                   <Map latitude={-2.990934} longitude={104.756554} onMarkerChange={handleLocationChange}></Map>
                 </Card>
-              )}
+              )} */}
 
               {/* <Form.Item
                 label="Alamat Lengkap"
@@ -742,4 +646,4 @@ export const DETAIL_MURID = () => {
   );
 };
 
-export default DETAIL_MURID;
+export default DETAIL_GUARDIAN;
