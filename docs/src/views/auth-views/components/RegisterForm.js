@@ -94,7 +94,7 @@ export const RegisterForm = (props) => {
 				</Form.Item>
 				<Form.Item 
 					name="confirm" 
-					label="ConfirmPassword" 
+					label="Confirm_password" 
 					rules={rules.confirm}
 					hasFeedback
 				>

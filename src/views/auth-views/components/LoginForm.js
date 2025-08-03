@@ -9,7 +9,7 @@ import {
 	authenticated, getUserProfile, login, showAuthMessage, showLoading
 } from 'redux/features/auth';
 import axios from 'axios';
-import { strings } from '../../../res/strings/index';
+import {strings} from  '../../../res/strings/index'
 
 export const LoginForm = (props) => {
 	const dispatch = useDispatch();
@@ -40,7 +40,7 @@ export const LoginForm = (props) => {
 				password: values.password
 			}
 			console.log(credentials)
-			const user = await axios.post('http://103.197.190.74:3001/api/v1/auth/login', credentials).then(response => {
+			const user = await axios.post(`${strings.api.host}/auth/login`, credentials).then(response => {
 				// console.log(response)
 				return response
 			}).catch(function (error) {

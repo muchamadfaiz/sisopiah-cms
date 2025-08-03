@@ -50,7 +50,7 @@ export class ChangePassword extends Component {
 							</Form.Item>
 							<Form.Item
 								label="Confirm Password"
-								name="confirmPassword"
+								name="confirm_password"
 								rules={
 									[
 										{ 
