@@ -40,14 +40,14 @@ export const LoginForm = (props) => {
 				password: values.password
 			}
 			console.log(credentials)
-			const user = await axios.post('http://localhost:3001/api/v1/auth/login', credentials).then(response => {
+			const user = await axios.post('http://103.197.190.74:3001/api/v1/auth/login', credentials).then(response => {
 				// console.log(response)
 				return response
 			}).catch(function (error) {
 				console.log(error);
 			});
 
-			console.log(user)
+			console.log(user.data.data.accessToken)
 
 			if (user) {
 				const token = user.data.data.accessToken

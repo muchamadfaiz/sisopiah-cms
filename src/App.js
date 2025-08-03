@@ -6,8 +6,8 @@ import Views from './views';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet'
 
-const SITE_TITLE = process.env.REACT_APP_SITE_TITLE || "Portal Data | Sumatera Selatan"
-const DESCRIPTION = process.env.DESCRIPTION || "Portal Data | Sumatera Selatan"
+const SITE_TITLE = process.env.REACT_APP_SITE_TITLE || "Portal Data | SiSopiah"
+const DESCRIPTION = process.env.DESCRIPTION || "Portal Data | SiSopia"
 const FAVICON = "./favicon.png"
 
 function App() {
