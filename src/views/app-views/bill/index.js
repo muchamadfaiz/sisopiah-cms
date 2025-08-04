@@ -1,4 +1,4 @@
-import { Button, Card, Col, message, Row, Table, Input, Modal, Tag } from "antd";
+import { Button, Card, Col, message, Row, Table, Input, Modal, Tag, Select, DatePicker } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory, withRouter } from "react-router-dom";
@@ -9,6 +9,7 @@ import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
 import { deleteBill, fetchAllBills } from "redux/features/bill";
 import Utils from "../../../utils/index"
+import { fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -53,6 +54,7 @@ export const BILL = () => {
   const [role, setRole] = useState(0);
   const [metaData, setMetaData] = useState({});
   const [modal, contextHolder] = Modal.useModal();
+  const [subcategories, setSubcategories] = useState([]);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -278,8 +280,32 @@ export const BILL = () => {
   };
 
   const handleSearchByTitle = (event) => {
-    setFilters({ ...filters, name:event.target.value });
+    // setFilters({ ...filters, name:event.target.value });
   }
+
+  const handleSearchByStudentId = (value) => {
+        setFilters({
+        ...filters,
+        student_id: value, 
+        });
+  }
+
+  const handleDueDateRangeChange = (dates) => {
+  setFilters({
+    ...filters,
+    due_date_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
+    due_date_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
+  });
+ };
+
+   const handlePaidAtRangeChange = (dates) => {
+  setFilters({
+    ...filters,
+    paid_at_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
+    paid_at_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
+  });
+ };
+
 
   const confirm = (id) => {
     modal.confirm({
@@ -301,6 +327,23 @@ export const BILL = () => {
 //     getProfile()
 //   }, [filters]);
 
+const getSubcategories = async () => {
+    try {
+      const response = await dispatch(fetchAllStudents()).unwrap();
+      console.log('response: ', response);
+      setSubcategories(
+        response.data.map((guardian) => {
+          return {
+            value: guardian.id,
+            label: guardian.name,
+          };
+        })
+      );
+    } catch (error) {
+      message.error(error?.message || "Failed to fetch data");
+    }
+  };
+
   useEffect(() => {
   const fetchAll = async () => {
     setLoading(true);
@@ -317,6 +360,12 @@ export const BILL = () => {
   fetchAll();
 }, [filters]);
 
+
+// Fetch all students once, when the component mounts
+  useEffect(()=> {
+    getSubcategories()
+  },[])
+
   return (
     <>
       <LocalizedModal></LocalizedModal>
@@ -331,13 +380,50 @@ export const BILL = () => {
           <Card>
             <Row gutter={[6, 6]}>
               <Col md={8} xl={8} sm={24} >
-                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Murid" allowClear/>
+                {/* <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Murid" allowClear/> */}
+                <Select
+                    // mode="multiple"
+                    showSearch
+                    allowClear
+                    placeholder="Cari Berdasarkan Nama Murid"
+                    // optionFilterProp="children"
+                    style={{ width: "100%" }}
+                    value={filters.student_id || undefined} 
+                    onChange={handleSearchByStudentId}
+                    filterOption={(input, option) =>
+                        option?.children?.toLowerCase().includes(input.toLowerCase())
+                    }
+                >
+                    {subcategories.map((student) => (
+                        <Select.Option key={student.value} value={student.value}>
+                        {student.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+              <Col md={8} xl={8} sm={24}>
+              {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Jatuh Tempo</div> */}
+                <DatePicker.RangePicker
+                style={{ width: "100%" }}
+                format="DD-MM-YYYY"
+                placeholder={["Jatuh Tempo Dari", "Jatuh Tempo Sampai"]}
+                onChange={handleDueDateRangeChange}
+                />
+              </Col>
+               <Col md={8} xl={8} sm={24}>
+               {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Tanggal Bayar</div> */}
+                <DatePicker.RangePicker
+                style={{ width: "100%" }}
+                format="DD-MM-YYYY"
+                placeholder={["Tanggal Bayar Dari", "Tanggal Bayar Sampai"]}
+                onChange={handlePaidAtRangeChange}
+                />
               </Col>
               {/* <Col md={4} xl={4} sm={24} >
-                <Input onChange={handleSearchByOPD} name="opd" placeholder="OPD"></Input>
+                <Input onChange={() => {}} name="opd" placeholder="OPD"></Input>
               </Col>
               <Col md={4} xl={4} sm={24} >
-                <Input onChange={handleSearchPerusahaan} name="owner" placeholder="Perusahaan"></Input>
+                <Input onChange={() => {}} name="owner" placeholder="Perusahaan"></Input>
               </Col> */}
               <Col md={4} xl={4} sm={24} >
                 <Button type="primary" style={{ width: "100%" }}>Cari</Button>
