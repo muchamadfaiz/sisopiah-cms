@@ -43,7 +43,7 @@ export const addStudent = createAsyncThunk("Student/addStudent", async (payload,
 
 export const updateStudent = createAsyncThunk("Student/updateStudent", async (payload, { rejectWithValue }) => {
  try {
-  const response = await request("patch", `${URLS.STUDENT}/${payload.id}`, payload);
+  const response = await request("put", `${URLS.STUDENT}/${payload.id}`, payload);
   return response;
  } catch (error) {
   return rejectWithValue(error);

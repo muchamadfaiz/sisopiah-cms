@@ -607,7 +607,7 @@ export const DETAIL_GUARDIAN= () => {
 
               </Tabs> */}
 
-              <Form.Item>
+              <Form.Item wrapperCol={24}>
                 <Button
                   type="primary"
                   htmlType="submit"

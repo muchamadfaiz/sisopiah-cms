@@ -18,6 +18,7 @@ import {
 import { MyEditor } from "../../../components/Editor";
 import moment from "moment";
 import { addStudent, fetchOneStudent, updateStudent } from "redux/features/students";
+import { fetchAllGuardians } from "redux/features/guardians";
 
 const selectStyle = {
   width: "100%",
@@ -36,6 +37,33 @@ const genderOptions = [
   { label: "Perempuan", value: "P" },
 ];
 
+const relasiOptions = [
+  { label: "Ayah", value: "ayah" },
+  { label: "Ibu", value: "ibu" },
+];
+
+const dummyGuardians = [
+  {
+    id: 1,
+    name: "Siti Aminah",
+    phone: "+628987654321",
+    address: "Jl. Melati No. 45, Bandung",
+    user_id: 3,
+    students: [],
+  },
+  {
+    id: 2,
+    name: "Ahmad Zainal",
+    phone: "+6281234567890",
+    address: "Jl. Raya No. 123, Jakarta",
+    user_id: 2,
+    students: [],
+  },
+];
+
+
+
+
 export const DETAIL_STUDENT = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -44,23 +72,37 @@ export const DETAIL_STUDENT = () => {
   const [perusahaan, setPerusahaan] = useState("");
   const [companies, setCompanies] = useState([])
   const [loading, setLoading] = useState("");
-  const [subcategories, setSubcategories] = useState();
+  const [subcategories, setSubcategories] = useState([]);
   const [tags, setTags] = useState();
   const [role, setRole] = useState('');
 
-  const [kabupaten, setKabupaten] = useState("");
-  const [opd, setOpd] = useState("");
-  const [kategori, setKategori] = useState("");
-  const [sdg, setSdg] = useState("");
-
   const onFinish = (values) => {
+    console.log('values: ', values);
+    console.log('location: ', location);
     if (location?.state?.id) {
       updateData({
         ...values,
         id: location.state.id,
+        guardians: [
+        {
+            guardian_id: values.guardian,
+            relation: "Ayah", 
+        },
+    ],
       });
     } else {
-      createData(values);
+        console.log('values: ', values);
+      createData(
+        {
+          ...values,
+          guardians: [
+            {
+              guardian_id: values.guardian,
+              relation: values.relation ? values.relation : "takada",
+            },
+          ],
+        }
+      );
     }
   };
 
@@ -196,13 +238,13 @@ export const DETAIL_STUDENT = () => {
         // nilai_diskon_pajak: (role === 1 || role === 6) ? parseInt(values.nilai_diskon_pajak) : 0,
         // kebutuhan: kebutuhan,
       })).unwrap();
-      if (role === 3) {
-        history.push("/app/projects-opd");
-      } else if (role === 1) {
-        history.push("/app/projects");
-      } else {
-        history.push("/app/my-dapur");
-      }
+    //   if (role === 3) {
+    //     history.push("/app/projects-opd");
+    //   } else if (role === 1) {
+    //     history.push("/app/projects");
+    //   } else {
+        history.push("/app/student");
+    //   }
     } catch (error) {
       message.error(error?.message || "Failed to fetch data");
     }
@@ -220,7 +262,8 @@ export const DETAIL_STUDENT = () => {
         ...student,
         // birth_date: moment(student.birth_date).format("YYYY-MM-DD") || "-",
         birth_date: student.birth_date ? moment(student.birth_date) : null,
-        guardian: student.guardians?.[0]?.guardian?.name || "-",
+        guardian: student.guardians?.[0]?.guardian?.id || "-",
+        relation:student.guardians?.[0]?.relation || "-",
       });
     } catch (err) {
       console.log(err);
@@ -229,12 +272,13 @@ export const DETAIL_STUDENT = () => {
 
   const getSubcategories = async () => {
     try {
-      const response = await dispatch(fetchAllSubcategory()).unwrap();
+      const response = await dispatch(fetchAllGuardians()).unwrap();
+      console.log('response: ', response);
       setSubcategories(
-        response.data.map((category) => {
+        response.data.map((guardian) => {
           return {
-            value: category.id,
-            label: category.name,
+            value: guardian.id,
+            label: guardian.name,
           };
         })
       );
@@ -245,14 +289,15 @@ export const DETAIL_STUDENT = () => {
 
   useEffect(() => {
     if (location?.state?.id) {
+        console.log('id: ', location?.state?.id);
       getDataById(location?.state?.id);
 
     }
-    // getSubcategories();
-    // getTags();
-    // getProfile()
-    // getAllCompanies()
   }, []);
+
+  useEffect(()=> {
+    getSubcategories()
+  },[])
 
   const layout = {
     labelCol: {
@@ -271,8 +316,14 @@ export const DETAIL_STUDENT = () => {
     },
   };
 
+  const guardianOptions = subcategories.map((guardian) => ({
+        value: guardian.id,
+        label: guardian.name,
+     }));
+
   return (
     <>
+    <p>{subcategories.map((item) => <p>{item.label}</p>)}</p>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
           {/* <h2>Tambah/Update Proyek Baru {perusahaan} Kode {role}</h2> */}
@@ -342,311 +393,20 @@ export const DETAIL_STUDENT = () => {
                 label="Wali Murid"
                 name="guardian"
               >
-                <Input />
-              </Form.Item>
-
-
-              {/* {role === 1 && (
-                <Form.Item
-                  label="Penyedia Dana"
-                  name="perusahaan"
-                >
-                  <Select options={companies} />
-                </Form.Item>
-              )}
-
-              {role === 4 && (
-                <Form.Item
-                  label="Penyedia Dana"
-                  name="perusahaan"
-                >
-                  <Select options={companies} disabled={role !== 1 ? true : false} />
-                </Form.Item>
-              )} */}
-
-              {/* <Form.Item
-                label="Koordinat (Link Google Map)"
-                name="koordinat"
-              >
-                <Input defaultValue={'-'} />
-              </Form.Item> */}
-{/* 
-              {(location?.state?.id) ? (
-                <Card>
-                  {((markerLocation.latitude && markerLocation.longitude) && (
-                    <Map latitude={markerLocation.latitude} longitude={markerLocation.longitude} onMarkerChange={handleLocationChange}></Map>
-                  ))}
-                </Card>
-              ) : (
-                <Card>
-                  <Map latitude={-2.990934} longitude={104.756554} onMarkerChange={handleLocationChange}></Map>
-                </Card>
-              )} */}
-
-              {/* <Form.Item
-                label="Alamat Lengkap"
-                name="lokasi"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Kelurahan (Contoh: SILABERANTI)"
-                name="kelurahan"
-              >
-                <Input defaultValue={"LAINNYA"} />
-              </Form.Item>
-
-              <Form.Item
-                label="Kecamatan (Contoh: SEBERANG ULU I)"
-                name="kecamatan"
-              >
-                <Input defaultValue={"LAINNYA"} />
-              </Form.Item>
-
-              <Form.Item
-                label="Kabupaten"
-                name="kabupaten"
-              >
-                <Select defaultValue={kabupaten} options={kabupatens} />
-              </Form.Item>
-
-              <Form.Item
-                label="OPD"
-                name="opd"
-              >
-                <Select defaultValue={opd} options={opds} />
-              </Form.Item>
-
-              <Form.Item
-                label="Kategori"
-                name="kategori"
-              >
-                <Select defaultValue={kategori} options={categories} />
-              </Form.Item>
-
-              <Form.Item
-                label="SDG"
-                name="sdg"
-              >
-                <Select defaultValue={sdg} options={sdgs} />
-              </Form.Item>
-
-              <Form.Item
-                label="Pelaksana"
-                name="pelaksana"
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Tanggal Mulai"
-                name="startDate"
-              >
-                <DatePicker format={'YYYY-MM-DD'} />
-              </Form.Item>
-
-              <Form.Item
-                label="Tanggal Selesai"
-                name="deadline"
-
-              >
-                <DatePicker format={'YYYY-MM-DD'} />
-              </Form.Item>
-
-              <Form.Item
-                label="Nilai Proyek"
-                name="cost"
-
-              >
-                <InputNumber style={{ width: "100%" }} defaultValue={0} />
-              </Form.Item>
-
-              {role === 6 || role === 1 && (
-                <Form.Item
-                  label="Sertifikat"
-                  name="certificate"
-                >
-                  <Input />
-                </Form.Item>
-              )}
-
-              {location?.state?.id && (
-                <Form.Item
-                  label="Aktual Proyek"
-                  name="actual"
-                >
-                  <InputNumber style={{ width: "100%" }} />
-                </Form.Item>
-              )} */}
-
-              {/* <Form.Item
-                label="Subcategory"
-                name="vendor_id"
-              >
                 <Select
-                  defaultValue="Not Picked"
-                  style={selectStyle}
-                  options={subcategories}
+                    placeholder="Pilih Wali Murid"
+                    options={subcategories}
                 />
-              </Form.Item> */}
-
-              {/* {role === 1 && (
-                <Form.Item
-                  label="Status"
-                  name="status"
-                  rules={rules}
-                >
-                  <Select
-                    defaultValue="Not Picked"
-                    style={selectStyle}
-                    options={[{
-                      label: "OPEN",
-                      value: "OPEN"
-                    }, {
-                      label: "CLOSED",
-                      value: "CLOSED"
-                    }, {
-                      label: "CERTIFIED",
-                      value: "CERTIFIED"
-                    }]}
-                  />
-                </Form.Item>
-              )}
-
-              {role === 1 && (
-                <Form.Item
-                  label="Verification"
-                  name="verification"
-                  rules={rules}
-                >
-                  <Select
-                    defaultValue="Not Picked"
-                    style={selectStyle}
-                    options={[{
-                      label: "WAITING",
-                      value: "WAITING"
-                    }, {
-                      label: "SEMI-VERIFIED",
-                      value: "SEMI-VERIFIED"
-                    }, {
-                      label: "VERIFIED",
-                      value: "VERIFIED"
-                    }]}
-                  />
-                </Form.Item>
-              )}
-
-              {role === 4 && (
-                <Form.Item
-                  label="Status"
-                  name="status"
-                  rules={rules}
-                >
-                  <Select
-                    defaultValue="Not Picked"
-                    style={selectStyle}
-                    options={[{
-                      label: "OPEN",
-                      value: "OPEN"
-                    }, {
-                      label: "CLOSED",
-                      value: "CLOSED"
-                    }, {
-                      label: "CERTIFIED",
-                      value: "CERTIFIED"
-                    }]}
-                  />
-                </Form.Item>
-              )} */}
-
-              {/* <Form.Item
-                label="File URL"
-                name="file"
-              >
-                <Input />
-              </Form.Item> */}
-
-              {/* <Form.Item
-                label="No Phone"
-                name="no_phone"
-              >
-                <Input />
               </Form.Item>
 
-              <Form.Item
-                label="Description (Max 255 Characters)"
-                name="description"
-                defaultValue="-"
+               <Form.Item
+                label="Relasi"
+                name="relation"
               >
-                <Input />
+                <Select placeholder="Pilih Relasi" options={relasiOptions} />
               </Form.Item>
 
-              <Form.Item
-                label="Link Proposal (https://drive.google.com)"
-                name="proposal"
-              >
-                <Input />
-              </Form.Item>
-
-              {role === 6 || role === 1 && (
-                <Form.Item
-                  label="Nilai SROI"
-                  name="nilai_sroi"
-                >
-                  <Input defaultValue={0} />
-                </Form.Item>
-              )}
-
-              {role === 6 || role === 1 && (
-                <Form.Item
-                  label="Nilai Diskon Pajak"
-                  name="diskon_pajak"
-                >
-                  <Input defaultValue={0} />
-                </Form.Item>
-              )} */}
-
-              {/* <Tabs>
-                <Tabs.TabPane tab="Detail Kebutuhan" label="item-1">
-                  <Form.Item>
-                    <MyEditor
-                      data={kebutuhan}
-                      setState={setKebutuhan}
-                      defaultValue="Konten"
-                    />
-                  </Form.Item>
-                </Tabs.TabPane>
-
-              </Tabs>
-
-              <Tabs>
-                <Tabs.TabPane tab="Progress" label="item-1">
-                  <Form.Item>
-                    <MyEditor
-                      data={bast}
-                      setState={setBast}
-                      defaultValue="Konten"
-                    />
-                  </Form.Item>
-                </Tabs.TabPane>
-
-              </Tabs>
-
-              <Tabs>
-                <Tabs.TabPane tab="Laporan" label="item-1">
-                  <Form.Item>
-                    <MyEditor
-                      data={laporan}
-                      setState={setLaporan}
-                      defaultValue="Konten"
-                    />
-                  </Form.Item>
-                </Tabs.TabPane>
-
-              </Tabs> */}
-
-              <Form.Item>
+              <Form.Item wrapperCol={24}>
                 <Button
                   type="primary"
                   htmlType="submit"

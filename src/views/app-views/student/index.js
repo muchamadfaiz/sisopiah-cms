@@ -7,7 +7,7 @@ import { strings } from "res";
 import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
-import { fetchAllDapurs, fetchAllStudents } from "redux/features/students";
+import { deleteStudent, fetchAllDapurs, fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
 let IDRFormat = new Intl.NumberFormat('en-US', {
@@ -123,7 +123,7 @@ export const STUDENT = () => {
         }
     },
     {
-      title: () => <div className="text-center">Action</div>,
+      title: () => <div className="text-center">Detail</div>,
       key: "status",
       fixed: 'right',
       render: (_, record) => {
@@ -143,7 +143,7 @@ export const STUDENT = () => {
                 }}
               >
                 {/* Lihat Dapur */}
-                Detail Murid
+                Detail
               </Button>
             </div>
           )
@@ -168,6 +168,52 @@ export const STUDENT = () => {
         }
       }
     },
+    {
+          title: () => <div className="text-center">Action</div>,
+          key: "status",
+          fixed: 'right',
+          render: (_, record) => {
+            if (role !== 1) 
+                {
+              return (
+                <div className="text-center">
+                  <Button
+                    type="danger"
+                    style={{ textAlign: "center", color: "white" }}
+                    onClick={() => {
+                      confirm(record?.id);
+                    //   history.push({
+                    //     pathname: `${strings.navigation.path.detail_guardian}`,
+                    //     state: record,
+                    //   });
+                    }}
+                  >
+                    {/* Lihat Dapur */}
+                    Delete
+                  </Button>
+                </div>
+              )
+            } else {
+              return (
+                <div className="text-center">
+                  <Button
+                    type="danger"
+                    style={{ textAlign: "center", color: "white" }}
+                    onClick={() => {
+                      // confirm(record?.id);
+                      history.push({
+                        pathname: `${strings.navigation.path.detail_project}`,
+                        state: record,
+                      });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )
+            }
+          }
+        },
   ];
 
   const getData = async (params) => {
@@ -236,7 +282,7 @@ export const STUDENT = () => {
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
-        await dispatch(deleteProject(id));
+        await dispatch(deleteStudent(id));
         getData();
       },
       onCancel: () => { },

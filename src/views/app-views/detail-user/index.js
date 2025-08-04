@@ -104,7 +104,7 @@ export const USER = () => {
   }
 
   useEffect(() => {
-    getAllCompanies()
+    // getAllCompanies()
     if (location?.state?.id) {
       getDataById(location?.state?.id)
     }
