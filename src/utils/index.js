@@ -207,6 +207,7 @@ class Utils {
   };
 
   static capitalize = (s) => {
+    if (!s || typeof s !== "string") return "";
     return s[0].toUpperCase() + s.slice(1);
   };
 }

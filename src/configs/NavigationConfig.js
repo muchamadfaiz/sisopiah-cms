@@ -39,7 +39,7 @@ const dashBoardNavTree = [{
     },
     {
       key: "Tagihan",
-      path: strings.navigation.path.finished_projects,
+      path: strings.navigation.path.bill,
       title: "Tagihan",
       icon: CheckCircleOutlined,
       breadcrumb: false,

@@ -41,6 +41,7 @@ export const strings = {
     register: "/auth/register",
     main: "/app",
     path: {
+    // auth
       login: "login",
       register: "register",
       projects:"/app/projects",
@@ -49,12 +50,12 @@ export const strings = {
       resend: "resend",
       please: "please",
       logout: "logout",
+
       dashboard: "/app/dashboard",
       contents: "/app/contents",
       my_projects: "/app/my-projects",
       dapur: "/app/my-dapur",
       semua_dapur: "/app/my-semua-dapur",
-    //   murid: "/app/murid",
       verification_projects: "/app/verification-projects",
       open_projects: "/app/open-projects",
       my_targets: "/app/my-targets",
@@ -67,9 +68,9 @@ export const strings = {
       student: "/app/student",
       guardian: "/app/wali-murid",
       vendor: "/app/vendor",
+      bill: "/app/student-bills",
+      
       detail_category: "/app/detail-category",
-      detail_student: "/app/detail-student",
-      detail_guardian: "/app/detail-guardian",
       detail_dapur: "/app/detail-dapur",
       detail_project_read_only: "/app/detail-project-read-only",
       detail_project_verification: "/app/detail-project-verification",
@@ -79,13 +80,17 @@ export const strings = {
       ambil_project: "/app/ambil-project",
       detail_categorization: "/app/detail-categorization",
       detail_user: "/app/detail-user",
+      detail_tag: "/app/detail-tag",
+      detail_subcategory: "/app/detail-subcategory",
+      detail_student: "/app/detail-student",
+      detail_guardian: "/app/detail-guardian",
+      detail_bill: "/app/student-bills-detail",
+
       users: "/app/users",
       profile: "/app/profile",
       settings: "/app/settings",
       roles: "/app/roles",
       tags: "/app/tags",
-      detail_tag: "/app/detail-tag",
-      detail_subcategory: "/app/detail-subcategory",
       static_target: "/app/target"
     },
   },

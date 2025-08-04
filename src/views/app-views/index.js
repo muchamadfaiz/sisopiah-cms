@@ -13,7 +13,6 @@ import USERS from "./users";
 import PROJECTS from "./projects";
 import MY_DAPUR from "./my-dapur";
 import OPEN_PROJECTS from "./open-projects";
-import MURID, { STUDENT } from "./student";
 import FINISHED_PROJECTS from "./finished-projects";
 import VERIFICATION_PROJECTS from "./verification-projects";
 import VENDORS from "./vendors";
@@ -21,6 +20,9 @@ import MY_TARGETS from "./my-targets";
 import WAJIB_PAJAK from "./wajib-pajak";
 import MY_PROJECTS from "./my-projects";
 import SUBCATEGORY from "./subcategories";
+import GUARDIAN from "./guardian";
+import STUDENT from "./student";
+import BILL from "./bill"
 
 // Detail
 import DETAIL_CATEGORY from "./detail-category";
@@ -30,22 +32,23 @@ import DETAIL_PROJECT_VERIFICATION_PROECESS from "./detail-project-verification-
 import AMBIL_PROJECT from "./ambil-project";
 import DETAIL_WAJIB from "./detail-wajib";
 import DETAIL_USER from "./detail-user";
-import DETAIL_MURID, { DETAIL_STUDENT } from "./detail-student";
 import DETAIL_PROJECT_READ_ONLY from "./detail-project-read-only";
 import DETAIL_PROJECT_OPD from "./detail-project-opd";
 import DETAIL_TAG from "./detail-tag";
 import DETAIL_SUBCATEGORY from "./detail-subcategory";
+import DETAIL_GUARDIAN from "./detail-guardian";
+import DETAIL_STUDENT from "./detail-student";
+import DETAIL_BILL from "./detail-bill";
+
 
 import SETTINGS from "./settings";
 import { TAGS } from "./tags";
 import TARGET from "./static/target";
 import jwt_decode from 'jwt-decode'
-import { GUARDIAN, WALI_MURID } from "./guardian";
-import DETAIL_GUARDIAN from "./detail-guardian";
 
 export const AppViews = ({ match }) => {
 
-  const [privilege, setPrivilege] = useState(2)
+  const [privilege, setPrivilege] = useState(2) //ini nanti di sesuiakan lagi #TODO
 
   useEffect(() => {
     try {
@@ -54,7 +57,7 @@ export const AppViews = ({ match }) => {
         const decoded = jwt_decode(token);
 
         // setPrivilege(decoded.role_id)
-        setPrivilege(1)
+        setPrivilege(1) //ini nanti di sesuiakan lagi #TODO
       }
     } catch (err) {
       console.log({ err })
@@ -99,6 +102,12 @@ export const AppViews = ({ match }) => {
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.guardian}`}
           component={GUARDIAN}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.bill}`}
+          component={BILL}
         />
         {/* <PrivateRoute
           privileges={all_privileges}
@@ -166,6 +175,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.tags}`}
           component={TAGS}
         />
+    
 
         {/* DETAIL */}
         <PrivateRoute
@@ -203,6 +213,12 @@ export const AppViews = ({ match }) => {
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_guardian}`}
           component={DETAIL_GUARDIAN}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.detail_bill}`}
+          component={DETAIL_BILL}
         />
         <PrivateRoute
           privileges={all_privileges}
