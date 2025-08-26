@@ -41,10 +41,10 @@ export const strings = {
     register: "/auth/register",
     main: "/app",
     path: {
-    // auth
+      // auth
       login: "login",
       register: "register",
-      projects:"/app/projects",
+      projects: "/app/projects",
       forgot_password: "forgot-password",
       activate: "activate",
       resend: "resend",
@@ -69,7 +69,8 @@ export const strings = {
       guardian: "/app/wali-murid",
       vendor: "/app/vendor",
       bill: "/app/student-bills",
-      
+      wage: "/app/wage",
+
       detail_category: "/app/detail-category",
       detail_dapur: "/app/detail-dapur",
       detail_project_read_only: "/app/detail-project-read-only",
@@ -91,7 +92,7 @@ export const strings = {
       settings: "/app/settings",
       roles: "/app/roles",
       tags: "/app/tags",
-      static_target: "/app/target"
+      static_target: "/app/target",
     },
   },
 };

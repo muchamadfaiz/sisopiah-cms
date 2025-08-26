@@ -22,7 +22,8 @@ import MY_PROJECTS from "./my-projects";
 import SUBCATEGORY from "./subcategories";
 import GUARDIAN from "./guardian";
 import STUDENT from "./student";
-import BILL from "./bill"
+import BILL from "./bill";
+import WAGE from "./wage";
 
 // Detail
 import DETAIL_CATEGORY from "./detail-category";
@@ -40,29 +41,27 @@ import DETAIL_GUARDIAN from "./detail-guardian";
 import DETAIL_STUDENT from "./detail-student";
 import DETAIL_BILL from "./detail-bill";
 
-
 import SETTINGS from "./settings";
 import { TAGS } from "./tags";
 import TARGET from "./static/target";
-import jwt_decode from 'jwt-decode'
+import jwt_decode from "jwt-decode";
 
 export const AppViews = ({ match }) => {
-
-  const [privilege, setPrivilege] = useState(2) //ini nanti di sesuiakan lagi #TODO
+  const [privilege, setPrivilege] = useState(2); //ini nanti di sesuiakan lagi #TODO
 
   useEffect(() => {
     try {
-      if (localStorage.getItem('token')) {
-        const token = localStorage.getItem('token');
+      if (localStorage.getItem("token")) {
+        const token = localStorage.getItem("token");
         const decoded = jwt_decode(token);
 
         // setPrivilege(decoded.role_id)
-        setPrivilege(1) //ini nanti di sesuiakan lagi #TODO
+        setPrivilege(1); //ini nanti di sesuiakan lagi #TODO
       }
     } catch (err) {
-      console.log({ err })
+      console.log({ err });
     }
-  }, [])
+  }, []);
 
   return (
     <Suspense fallback={<Loading cover="content" />}>
@@ -109,6 +108,12 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.bill}`}
           component={BILL}
         />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.wage}`}
+          component={WAGE}
+        />
         {/* <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
@@ -121,7 +126,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.subcategories}`}
           component={SUBCATEGORY}
         />
-         <PrivateRoute
+        <PrivateRoute
           privileges={verifikator}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.verification_projects}`}
@@ -139,7 +144,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.projects}`}
           component={PROJECTS}
         />
-         <PrivateRoute
+        <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.open_projects}`}
@@ -175,7 +180,6 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.tags}`}
           component={TAGS}
         />
-    
 
         {/* DETAIL */}
         <PrivateRoute
@@ -226,7 +230,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.detail_project_read_only}`}
           component={DETAIL_PROJECT_READ_ONLY}
         />
-         <PrivateRoute
+        <PrivateRoute
           privileges={verifikator}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_project_verification}`}
@@ -244,7 +248,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.detail_tag}`}
           component={DETAIL_TAG}
         />
-         <PrivateRoute
+        <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_project_opd}`}
@@ -278,10 +282,7 @@ export const AppViews = ({ match }) => {
           component={TARGET}
         />
 
-        <Redirect
-          from={`${match.url}`}
-          to={`${strings.navigation.path.dashboard}`}
-        />
+        <Redirect from={`${match.url}`} to={`${strings.navigation.path.dashboard}`} />
       </Switch>
     </Suspense>
   );

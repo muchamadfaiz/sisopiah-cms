@@ -8,13 +8,13 @@ import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
 import { deleteBill, fetchAllBills } from "redux/features/bill";
-import Utils from "../../../utils/index"
+import Utils from "../../../utils/index";
 import { fetchAllStudents } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
-let IDRFormat = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'IDR',
+let IDRFormat = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "IDR",
 });
 
 const LocalizedModal = () => {
@@ -27,23 +27,16 @@ const LocalizedModal = () => {
   };
   return (
     <>
-      <Modal
-        title="Modal"
-        open={open}
-        onOk={hideModal}
-        onCancel={hideModal}
-        okText="Ok"
-        cancelText="Cancel"
-      >
+      <Modal title="Modal" open={open} onOk={hideModal} onCancel={hideModal} okText="Ok" cancelText="Cancel">
         <p>Anda yakin ingin melakukan aksi ini?</p>
       </Modal>
     </>
   );
-}
+};
 
 const statusColorMap = {
-  true: "green", 
-  false: "red",      
+  true: "green",
+  false: "red",
 };
 
 export const BILL = () => {
@@ -67,18 +60,18 @@ export const BILL = () => {
 
   const getProfile = async () => {
     try {
-      console.log('Sending token:', localStorage.getItem('token'));
+      console.log("Sending token:", localStorage.getItem("token"));
       const response = await dispatch(getUserProfile()).unwrap();
-      setRole(response.data.user.role_id)
+      setRole(response.data.user.role_id);
     } catch (error) {
-    //   setLoading(false);
+      //   setLoading(false);
       message.error(error?.message || "Failed to fetch data");
     }
   };
 
   const genderMap = {
     P: "Perempuan",
-    L: "Laki-laki"
+    L: "Laki-laki",
   };
 
   const tableColumns = [
@@ -86,8 +79,7 @@ export const BILL = () => {
       title: "No",
       dataIndex: "no",
       key: "no",
-      render: (_text, _record, index) =>
-        (filters.page - 1) * filters.limit + index + 1,
+      render: (_text, _record, index) => (filters.page - 1) * filters.limit + index + 1,
     },
     {
       title: "Nama",
@@ -109,8 +101,7 @@ export const BILL = () => {
       title: "Jumlah",
       dataIndex: "amount",
       key: "amount",
-      render: (text) =>
-        text ? `Rp ${Number(text).toLocaleString("id-ID")}` : "-"
+      render: (text) => (text ? `Rp ${Number(text).toLocaleString("id-ID")}` : "-"),
     },
     {
       title: "Jatuh Tempo",
@@ -122,11 +113,7 @@ export const BILL = () => {
       title: "Status",
       dataIndex: "is_paid",
       key: "is_paid",
-       render: (value) => (
-        <Tag color={statusColorMap[value]}>
-            {value ? "Lunas" : "Belum Lunas"}
-        </Tag>
-  ),
+      render: (value) => <Tag color={statusColorMap[value]}>{value ? "Lunas" : "Belum Lunas"}</Tag>,
     },
     {
       title: "Tanggal Bayar",
@@ -140,7 +127,7 @@ export const BILL = () => {
       key: "payment_method",
       render: (text) => Utils.capitalize(text) || "-",
     },
-        {
+    {
       title: "Link Pembayaran",
       dataIndex: "payment_link",
       key: "payment_link",
@@ -157,10 +144,9 @@ export const BILL = () => {
     {
       title: () => <div className="text-center">Detail</div>,
       key: "status",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => {
-        if (role !== 1) 
-            {
+        if (role !== 1) {
           return (
             <div className="text-center">
               <Button
@@ -178,7 +164,7 @@ export const BILL = () => {
                 Detail
               </Button>
             </div>
-          )
+          );
         } else {
           return (
             <div className="text-center">
@@ -196,69 +182,68 @@ export const BILL = () => {
                 Detail Dapur
               </Button>
             </div>
-          )
+          );
         }
-      }
+      },
     },
     {
-          title: () => <div className="text-center">Action</div>,
-          key: "status",
-          fixed: 'right',
-          render: (_, record) => {
-            if (role !== 1) 
-                {
-              return (
-                <div className="text-center">
-                  <Button
-                    type="danger"
-                    style={{ textAlign: "center", color: "white" }}
-                    onClick={() => {
-                      confirm(record?.id);
-                    //   history.push({
-                    //     pathname: `${strings.navigation.path.detail_guardian}`,
-                    //     state: record,
-                    //   });
-                    }}
-                  >
-                    {/* Lihat Dapur */}
-                    Delete
-                  </Button>
-                </div>
-              )
-            } else {
-              return (
-                <div className="text-center">
-                  <Button
-                    type="danger"
-                    style={{ textAlign: "center", color: "white" }}
-                    onClick={() => {
-                      // confirm(record?.id);
-                      history.push({
-                        pathname: `${strings.navigation.path.detail_project}`,
-                        state: record,
-                      });
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )
-            }
-          }
-        },
+      title: () => <div className="text-center">Action</div>,
+      key: "status",
+      fixed: "right",
+      render: (_, record) => {
+        if (role !== 1) {
+          return (
+            <div className="text-center">
+              <Button
+                type="danger"
+                style={{ textAlign: "center", color: "white" }}
+                onClick={() => {
+                  confirm(record?.id);
+                  //   history.push({
+                  //     pathname: `${strings.navigation.path.detail_guardian}`,
+                  //     state: record,
+                  //   });
+                }}
+              >
+                {/* Lihat Dapur */}
+                Delete
+              </Button>
+            </div>
+          );
+        } else {
+          return (
+            <div className="text-center">
+              <Button
+                type="danger"
+                style={{ textAlign: "center", color: "white" }}
+                onClick={() => {
+                  // confirm(record?.id);
+                  history.push({
+                    pathname: `${strings.navigation.path.detail_project}`,
+                    state: record,
+                  });
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          );
+        }
+      },
+    },
   ];
 
   const getData = async (params) => {
     try {
-    //   setLoading(true);
+      //   setLoading(true);
       const response = await dispatch(fetchAllBills(params)).unwrap();
-      console.log('hahai: ', response.data)
-    //   setData(response.data.Projects);
+      console.log("hahai: ", response.data);
+      //   setData(response.data.Projects);
       setData(response.data);
       setMetaData(response.meta);
-    //   setLoading(false);
+      //   setLoading(false);
     } catch (error) {
-    //   setLoading(false);
+      //   setLoading(false);
       message.error(error?.message || "Failed to fetch data");
     }
   };
@@ -281,31 +266,30 @@ export const BILL = () => {
 
   const handleSearchByTitle = (event) => {
     // setFilters({ ...filters, name:event.target.value });
-  }
+  };
 
   const handleSearchByStudentId = (value) => {
-        setFilters({
-        ...filters,
-        student_id: value, 
-        });
-  }
+    setFilters({
+      ...filters,
+      student_id: value,
+    });
+  };
 
   const handleDueDateRangeChange = (dates) => {
-  setFilters({
-    ...filters,
-    due_date_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
-    due_date_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
-  });
- };
+    setFilters({
+      ...filters,
+      due_date_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
+      due_date_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
+    });
+  };
 
-   const handlePaidAtRangeChange = (dates) => {
-  setFilters({
-    ...filters,
-    paid_at_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
-    paid_at_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
-  });
- };
-
+  const handlePaidAtRangeChange = (dates) => {
+    setFilters({
+      ...filters,
+      paid_at_from: dates?.[0]?.format("YYYY-MM-DD") || undefined,
+      paid_at_to: dates?.[1]?.format("YYYY-MM-DD") || undefined,
+    });
+  };
 
   const confirm = (id) => {
     modal.confirm({
@@ -318,19 +302,19 @@ export const BILL = () => {
         await dispatch(deleteBill(id));
         getData();
       },
-      onCancel: () => { },
+      onCancel: () => {},
     });
   };
 
-//   useEffect(() => {
-//     getData(filters);
-//     getProfile()
-//   }, [filters]);
+  //   useEffect(() => {
+  //     getData(filters);
+  //     getProfile()
+  //   }, [filters]);
 
-const getSubcategories = async () => {
+  const getSubcategories = async () => {
     try {
       const response = await dispatch(fetchAllStudents()).unwrap();
-      console.log('response: ', response);
+      console.log("response: ", response);
       setSubcategories(
         response.data.map((guardian) => {
           return {
@@ -345,26 +329,25 @@ const getSubcategories = async () => {
   };
 
   useEffect(() => {
-  const fetchAll = async () => {
-    setLoading(true);
-    try {
-    //   await getProfile();
-      await getData(filters);
-    } catch (error) {
-      message.error("Terjadi kesalahan saat memuat data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchAll = async () => {
+      setLoading(true);
+      try {
+        //   await getProfile();
+        await getData(filters);
+      } catch (error) {
+        message.error("Terjadi kesalahan saat memuat data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchAll();
-}, [filters]);
+    fetchAll();
+  }, [filters]);
 
-
-// Fetch all students once, when the component mounts
-  useEffect(()=> {
-    getSubcategories()
-  },[])
+  // Fetch all students once, when the component mounts
+  useEffect(() => {
+    getSubcategories();
+  }, []);
 
   return (
     <>
@@ -379,44 +362,42 @@ const getSubcategories = async () => {
         <Col xs={24} sm={24} md={24} lg={24}>
           <Card>
             <Row gutter={[6, 6]}>
-              <Col md={8} xl={8} sm={24} >
+              <Col md={8} xl={8} sm={24}>
                 {/* <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Murid" allowClear/> */}
                 <Select
-                    // mode="multiple"
-                    showSearch
-                    allowClear
-                    placeholder="Cari Berdasarkan Nama Murid"
-                    // optionFilterProp="children"
-                    style={{ width: "100%" }}
-                    value={filters.student_id || undefined} 
-                    onChange={handleSearchByStudentId}
-                    filterOption={(input, option) =>
-                        option?.children?.toLowerCase().includes(input.toLowerCase())
-                    }
+                  // mode="multiple"
+                  showSearch
+                  allowClear
+                  placeholder="Cari Berdasarkan Nama Murid"
+                  // optionFilterProp="children"
+                  style={{ width: "100%" }}
+                  value={filters.student_id || undefined}
+                  onChange={handleSearchByStudentId}
+                  filterOption={(input, option) => option?.children?.toLowerCase().includes(input.toLowerCase())}
                 >
-                    {subcategories.map((student) => (
-                        <Select.Option key={student.value} value={student.value}>
-                        {student.label}
-                        </Select.Option>
-                    ))}
+                  {subcategories.map((student) => (
+                    <Select.Option key={student.value} value={student.value}>
+                      {student.label}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Col>
               <Col md={8} xl={8} sm={24}>
-              {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Jatuh Tempo</div> */}
+                {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Jatuh Tempo</div> */}
                 <DatePicker.RangePicker
-                style={{ width: "100%" }}
-                format="DD-MM-YYYY"
-                placeholder={["Jatuh Tempo Dari", "Jatuh Tempo Sampai"]}
-                onChange={handleDueDateRangeChange}
+                  style={{ width: "100%" }}
+                  format="DD-MM-YYYY"
+                  placeholder={["Jatuh Tempo Dari", "Jatuh Tempo Sampai"]}
+                  onChange={handleDueDateRangeChange}
                 />
               </Col>
-               <Col md={8} xl={8} sm={24}>
-               {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Tanggal Bayar</div> */}
+              <Col md={8} xl={8} sm={24}>
+                {/* <div style={{ marginBottom: 4, fontWeight: 500 }}>Tanggal Bayar</div> */}
                 <DatePicker.RangePicker
-                style={{ width: "100%" }}
-                format="DD-MM-YYYY"
-                placeholder={["Tanggal Bayar Dari", "Tanggal Bayar Sampai"]}
-                onChange={handlePaidAtRangeChange}
+                  style={{ width: "100%" }}
+                  format="DD-MM-YYYY"
+                  placeholder={["Tanggal Bayar Dari", "Tanggal Bayar Sampai"]}
+                  onChange={handlePaidAtRangeChange}
                 />
               </Col>
               {/* <Col md={4} xl={4} sm={24} >
@@ -425,14 +406,16 @@ const getSubcategories = async () => {
               <Col md={4} xl={4} sm={24} >
                 <Input onChange={() => {}} name="owner" placeholder="Perusahaan"></Input>
               </Col> */}
-              <Col md={4} xl={4} sm={24} >
-                <Button type="primary" style={{ width: "100%" }}>Cari</Button>
+              <Col md={4} xl={4} sm={24}>
+                <Button type="primary" style={{ width: "100%" }}>
+                  Cari
+                </Button>
               </Col>
             </Row>
             <Table
               className="no-border-last"
               columns={tableColumns}
-              scroll={{ x: 'max-content' }} // enables horizontal scrolling
+              scroll={{ x: "max-content" }} // enables horizontal scrolling
               dataSource={data}
               rowKey="id"
               pagination={{
