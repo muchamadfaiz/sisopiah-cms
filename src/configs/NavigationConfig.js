@@ -68,7 +68,7 @@ const dashBoardNavTree = [
       },
       {
         key: "Gaji",
-        path: strings.navigation.path.wage,
+        path: strings.navigation.path.salary,
         title: "Gaji",
         icon: AimOutlined,
         breadcrumb: false,

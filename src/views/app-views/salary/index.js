@@ -8,6 +8,7 @@ import { fetchAllProjects, deleteProject } from "redux/features/projects";
 import { getUserProfile } from "redux/features/auth";
 import moment from "moment";
 import { deleteBill, fetchAllBills } from "redux/features/bill";
+import { deleteSalary, fetchAllSalaries, fetchAllWages } from "redux/features/salary";
 import Utils from "../../../utils/index";
 import { fetchAllStudents } from "redux/features/students";
 
@@ -46,7 +47,7 @@ const statusColorMap = {
   Unpaid: "red",
 };
 
-export const WAGE = () => {
+export const SALARY = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
@@ -175,212 +176,149 @@ export const WAGE = () => {
       render: (_text, _record, index) => (filters.page - 1) * filters.limit + index + 1,
     },
     {
-      title: "Id",
+      title: "ID",
       dataIndex: "id",
       key: "id",
     },
     {
       title: "Nama",
-      dataIndex: "nama",
+      dataIndex: ["employee", "name"],
       key: "nama",
     },
     {
       title: "Jabatan",
-      dataIndex: "jabatan",
+      dataIndex: ["employee", "position"],
       key: "jabatan",
     },
     {
       title: "Periode",
-      dataIndex: "periode",
+      dataIndex: ["period", "period_name"],
       key: "periode",
-      render: (val) => (val ? moment(val, "YYYY-MM").format("MMMM YYYY") : "-"),
+      render: (val) => val || "-",
+    },
+    {
+      title: "Gaji Pokok",
+      dataIndex: "base_salary",
+      key: "base_salary",
+      render: (val) => (val ? IDRFormat.format(val) : "-"),
+    },
+    {
+      title: "T. Makan",
+      key: "t_makan",
+      render: (_, record) => {
+        const makan = record.details?.find((d) => d.component?.id === 2);
+        return makan ? IDRFormat.format(Number(makan.amount) * (makan.qty || 1)) : "-";
+      },
+    },
+    {
+      title: "T. Komunikasi",
+      key: "t_komunikasi",
+      render: (_, record) => {
+        const komunikasi = record.details?.find((d) => d.component?.id === 4);
+        return komunikasi ? IDRFormat.format(Number(komunikasi.amount) * (komunikasi.qty || 1)) : "-";
+      },
+    },
+    {
+      title: "Bonus",
+      key: "bonus",
+      render: (_, record) => {
+        const bonus = record.details?.find((d) => d.component?.id === 10);
+        return bonus ? IDRFormat.format(Number(bonus.amount)) : "-";
+      },
+    },
+    {
+      title: "Potongan",
+      key: "potongan",
+      render: (_, record) => {
+        const potongan = record.details?.find((d) => d.component?.id === 11);
+        return potongan ? IDRFormat.format(Number(potongan.amount)) : "-";
+      },
     },
     {
       title: "THP",
-      dataIndex: "take_home_pay",
+      dataIndex: "total_earning",
       key: "take_home_pay",
-      render: (val) => (val != null ? IDRFormat.format(val) : "-"),
+      //   render: (val) => (val != null ? IDRFormat.format(val) : "-"),
+      render: (_, record) => {
+        // ambil gaji pokok
+        const gapok = Number(record.base_salary || 0);
+
+        // ambil detail komponen
+        const details = record.details || [];
+
+        // jumlahkan allowance + bonus
+        const allowanceAndBonus = details
+          .filter((d) => ["allowance", "bonus"].includes(d.component?.type))
+          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
+
+        // jumlahkan potongan
+        const deductions = details
+          .filter((d) => d.component?.type === "deduction")
+          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
+
+        // hitung THP
+        const thp = gapok + allowanceAndBonus - deductions;
+
+        return IDRFormat.format(thp);
+      },
     },
     {
       title: "Bank",
-      dataIndex: "payout_provider",
-      key: "payout_provider",
+      dataIndex: ["employee", "bank_name"],
+      key: "bank_name",
+      render: (_, record) => (record.nomor_rekening ? record.employee?.bank_name || "-" : "-"),
     },
     {
       title: "No Rekening",
-      dataIndex: "payout_account_no",
-      key: "payout_account_no",
+      dataIndex: "nomor_rekening",
+      key: "nomor_rekening",
+      render: (val, record) => val || record.employee?.bank_account_number || "-",
     },
-    // {
-    //   title: "Jumlah",
-    //   dataIndex: "amount",
-    //   key: "amount",
-    //   render: (text) => (text ? `Rp ${Number(text).toLocaleString("id-ID")}` : "-"),
-    // },
-    // {
-    //   title: "Jatuh Tempo",
-    //   dataIndex: "due_date",
-    //   key: "due_date",
-    //   render: (text) => moment(text).format("DD-MM-YYYY"),
-    // },
     {
       title: "Status",
-      dataIndex: "status",
+      dataIndex: "is_paid",
       key: "status",
-      render: (value) => <Tag color={statusColorMap[value] || "default"}>{value || "-"}</Tag>,
-    },
-    // {
-    //   title: "Tanggal Bayar",
-    //   dataIndex: "paid_at",
-    //   key: "paid_at",
-    //   render: (text) => moment(text).format("DD-MM-YYYY"),
-    // },
-    // {
-    //   title: "Metode Pembayaran",
-    //   dataIndex: "payment_method",
-    //   key: "payment_method",
-    //   render: (text) => Utils.capitalize(text) || "-",
-    // },
-    // {
-    //   title: "Link Pembayaran",
-    //   dataIndex: "payment_link",
-    //   key: "payment_link",
-    // },
-    // {
-    //   title: "Wali Murid",
-    //   dataIndex: "guardians",
-    //   key: "guardians",
-    //   render: (_, record) => {
-    //     const guardian = record.guardians?.[0]?.guardian
-    //     return guardian ? guardian.name : "-"
-    //     }
-    // },
-    {
-      title: () => <div className="text-center">Detail</div>,
-      key: "status",
-      fixed: "right",
-      render: (_, record) => {
-        if (role !== 1) {
-          return (
-            <div className="text-center">
-              <Button
-                type="primary"
-                style={{ textAlign: "center", color: "white" }}
-                onClick={() => {
-                  // confirm(record?.id);
-                  history.push({
-                    pathname: `${strings.navigation.path.detail_bill}`,
-                    state: record,
-                  });
-                }}
-              >
-                {/* Lihat Dapur */}
-                Detail
-              </Button>
-            </div>
-          );
-        } else {
-          return (
-            <div className="text-center">
-              <Button
-                type="primary"
-                style={{ textAlign: "center", color: "white" }}
-                onClick={() => {
-                  // confirm(record?.id);
-                  history.push({
-                    pathname: `${strings.navigation.path.detail_project}`,
-                    state: record,
-                  });
-                }}
-              >
-                Detail Dapur
-              </Button>
-            </div>
-          );
-        }
+      render: (val) => {
+        const label = val ? "Paid" : "Unpaid";
+        const color = val ? "green" : "red";
+        return <Tag color={color}>{label}</Tag>;
       },
     },
     {
-      title: () => <div className="text-center">Aksi</div>,
+      title: "Detail",
+      key: "detail",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          onClick={() => {
+            history.push({
+              pathname: `${strings.navigation.path.detail_salary}`,
+              state: record,
+            });
+          }}
+        >
+          Detail
+        </Button>
+      ),
+    },
+    {
+      title: "Aksi",
       key: "aksi",
-      fixed: "right",
-      render: (_, record) => {
-        const goDetail = () => {
-          if (role !== 1) {
-            history.push({
-              pathname: `${strings.navigation.path.detail_bill}`,
-              state: record,
-            });
-          } else {
-            history.push({
-              pathname: `${strings.navigation.path.detail_project}`,
-              state: record,
-            });
-          }
-        };
-        return (
-          <div className="text-center">
-            <Space>
-              <Button type="primary" onClick={goDetail}>
-                Detail
-              </Button>
-              <Button onClick={() => openSlip(record)}>Lihat Slip</Button>
-            </Space>
-          </div>
-        );
-      },
-    },
-    {
-      title: () => <div className="text-center">Action</div>,
-      key: "status",
-      fixed: "right",
-      render: (_, record) => {
-        if (role !== 1) {
-          return (
-            <div className="text-center">
-              <Button
-                type="danger"
-                style={{ textAlign: "center", color: "white" }}
-                onClick={() => {
-                  confirm(record?.id);
-                  //   history.push({
-                  //     pathname: `${strings.navigation.path.detail_guardian}`,
-                  //     state: record,
-                  //   });
-                }}
-              >
-                {/* Lihat Dapur */}
-                Delete
-              </Button>
-            </div>
-          );
-        } else {
-          return (
-            <div className="text-center">
-              <Button
-                type="danger"
-                style={{ textAlign: "center", color: "white" }}
-                onClick={() => {
-                  // confirm(record?.id);
-                  history.push({
-                    pathname: `${strings.navigation.path.detail_project}`,
-                    state: record,
-                  });
-                }}
-              >
-                Delete
-              </Button>
-            </div>
-          );
-        }
-      },
+      render: (_, record) => (
+        <Space>
+          <Button onClick={() => openSlip(record)}>Lihat Slip</Button>
+          <Button style={{ textAlign: "center", color: "white" }} type="danger" onClick={() => confirm(record.id)}>
+            Delete
+          </Button>
+        </Space>
+      ),
     },
   ];
 
   const getData = async (params) => {
     try {
       //   setLoading(true);
-      const response = await dispatch(fetchAllBills(params)).unwrap();
+      const response = await dispatch(fetchAllSalaries(params)).unwrap();
       console.log("hahai: ", response.data);
       //   setData(response.data.Projects);
       setData(response.data);
@@ -443,7 +381,7 @@ export const WAGE = () => {
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
-        await dispatch(deleteBill(id));
+        await dispatch(deleteSalary(id));
         getData();
       },
       onCancel: () => {},
@@ -711,7 +649,8 @@ export const WAGE = () => {
               className="no-border-last"
               columns={tableColumns}
               scroll={{ x: "max-content" }} // enables horizontal scrolling
-              dataSource={dataDummy}
+              //   dataSource={dataDummy}
+              dataSource={data}
               rowKey="id"
               pagination={{
                 defaultPageSize: 10,
@@ -732,7 +671,7 @@ export const WAGE = () => {
             htmlType="submit"
             onClick={() => {
               history.push({
-                pathname: `${strings.navigation.path.detail_bill}`,
+                pathname: `${strings.navigation.path.detail_salary}`,
               });
             }}
             block
@@ -801,4 +740,4 @@ export const WAGE = () => {
   );
 };
 
-export default withRouter(WAGE);
+export default withRouter(SALARY);

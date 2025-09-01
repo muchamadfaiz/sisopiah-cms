@@ -69,7 +69,7 @@ export const strings = {
       guardian: "/app/wali-murid",
       vendor: "/app/vendor",
       bill: "/app/student-bills",
-      wage: "/app/wage",
+      salary: "/app/salaries",
 
       detail_category: "/app/detail-category",
       detail_dapur: "/app/detail-dapur",
@@ -86,6 +86,7 @@ export const strings = {
       detail_student: "/app/detail-student",
       detail_guardian: "/app/detail-guardian",
       detail_bill: "/app/student-bills-detail",
+      detail_salary: "/app/salary-detail",
 
       users: "/app/users",
       profile: "/app/profile",

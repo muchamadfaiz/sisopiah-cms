@@ -91,75 +91,11 @@ export const DETAIL_BILL = () => {
     }
   };
 
-  const getProfile = async () => {
-    try {
-      const response = await dispatch(getUserProfile()).unwrap();
-      setRole(response.data.user.role_id);
-      setPerusahaan(response.data.user.perusahaan);
-    } catch (error) {
-      setLoading(false);
-      message.error(error?.message || "Failed to fetch data");
-    }
-  };
-
-  const getAllCompanies = async () => {
-    try {
-      const { data } = await dispatch(fetchAllWajib({ limit: 1000 })).unwrap();
-      const list_pt = data.data.map((item) => ({
-        value: item.perusahaan,
-        label: item.perusahaan,
-      }));
-
-      setCompanies(list_pt);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const [markerLocation, setMarkerLocation] = useState({
-    latitude: null,
-    longitude: null,
-  });
-
-  // Function to handle marker location change from MapboxMap
-  const handleLocationChange = (latitude, longitude) => {
-    setMarkerLocation({ latitude, longitude });
-  };
-
   const createData = async (values) => {
     try {
       await dispatch(
         addBill({
           ...values,
-          // name: values.name.toUpperCase(),
-          // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
-          // longitude: markerLocation.longitude ? markerLocation.longitude?.toString() : "104.756554",
-          // sdg: values.sdg || "LAINNYA",
-          // opd: values.opd || "LAINNYA",
-          // kecamatan: values.kecamatan ? values.kecamatan : "SUMATERA SELATAN",
-          // kelurahan: values.kelurahan ? values.kelurahan : "SUMATERA SELATAN",
-          // koordinat: values.koordinat ? values.koordinat : "SUMATERA SELATAN",
-          // kabupaten: values.kabupaten ? values.kabupaten : "SUMATERA SELATAN",
-          // endDate: values.deadline,
-          // sgd: values.sdg || "LAINNYA",
-          // kategori: values.kategori || "LAINNYA",
-          // pic_id: 1,
-          // vendor_id: 1,
-          // file: '-',
-          // owner: role === 1 ? values.perusahaan : perusahaan,
-          // perusahaan: role === 1 ? values.perusahaan : perusahaan,
-          // status: "OPEN",
-          // verification: "WAITING",
-          // cost: parseInt(values.cost || 0),
-          // actual: parseInt(values.actual || 0),
-          // diskon_pajak: parseInt(values.diskon_pajak || 0),
-          // bast: bast,
-          // proposal: values.proposal || "-",
-          // certificate: values.certificate ? values.certificate : "-",
-          // laporan: values.laporan || "-",
-          // description: values.description || "-",
-          // nilai_sroi: parseInt(values.nilai_sroi) || 0,
-          // kebutuhan: kebutuhan,
         })
       ).unwrap();
       //   if (role === 1) {

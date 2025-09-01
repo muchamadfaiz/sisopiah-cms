@@ -23,7 +23,7 @@ import SUBCATEGORY from "./subcategories";
 import GUARDIAN from "./guardian";
 import STUDENT from "./student";
 import BILL from "./bill";
-import WAGE from "./wage";
+import SALARY from "./salary";
 
 // Detail
 import DETAIL_CATEGORY from "./detail-category";
@@ -40,6 +40,7 @@ import DETAIL_SUBCATEGORY from "./detail-subcategory";
 import DETAIL_GUARDIAN from "./detail-guardian";
 import DETAIL_STUDENT from "./detail-student";
 import DETAIL_BILL from "./detail-bill";
+import DETAIL_SALARY from "./detail-salary";
 
 import SETTINGS from "./settings";
 import { TAGS } from "./tags";
@@ -111,8 +112,8 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.wage}`}
-          component={WAGE}
+          path={`${strings.navigation.path.salary}`}
+          component={SALARY}
         />
         {/* <PrivateRoute
           privileges={all_privileges}
@@ -223,6 +224,12 @@ export const AppViews = ({ match }) => {
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_bill}`}
           component={DETAIL_BILL}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.detail_salary}`}
+          component={DETAIL_SALARY}
         />
         <PrivateRoute
           privileges={all_privileges}
