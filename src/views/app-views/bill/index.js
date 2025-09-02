@@ -298,9 +298,19 @@ export const BILL = () => {
       content: "Are you sure wanna delete this?",
       okText: "Yes",
       cancelText: "No",
+      //   onOk: async () => {
+      //     await dispatch(deleteBill(id));
+      //     getData();
+      //   },
       onOk: async () => {
-        await dispatch(deleteBill(id));
-        getData();
+        try {
+          await dispatch(deleteBill(id)).unwrap();
+          message.success("Tagihan berhasil dihapus");
+          getData();
+        } catch (err) {
+          console.error("Delete error:", err);
+          message.error(err?.message || "Gagal menghapus tagihan");
+        }
       },
       onCancel: () => {},
     });
