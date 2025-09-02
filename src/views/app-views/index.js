@@ -46,6 +46,8 @@ import SETTINGS from "./settings";
 import { TAGS } from "./tags";
 import TARGET from "./static/target";
 import jwt_decode from "jwt-decode";
+import { EMPLOYEE } from "./employee";
+import DETAIL_EMPLOYEE from "./detail-employee";
 
 export const AppViews = ({ match }) => {
   const [privilege, setPrivilege] = useState(2); //ini nanti di sesuiakan lagi #TODO
@@ -114,6 +116,12 @@ export const AppViews = ({ match }) => {
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.salary}`}
           component={SALARY}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.employee}`}
+          component={EMPLOYEE}
         />
         {/* <PrivateRoute
           privileges={all_privileges}
@@ -230,6 +238,12 @@ export const AppViews = ({ match }) => {
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_salary}`}
           component={DETAIL_SALARY}
+        />
+        <PrivateRoute
+          privileges={all_privileges}
+          requiredPrivilege={privilege}
+          path={`${strings.navigation.path.detail_employee}`}
+          component={DETAIL_EMPLOYEE}
         />
         <PrivateRoute
           privileges={all_privileges}
