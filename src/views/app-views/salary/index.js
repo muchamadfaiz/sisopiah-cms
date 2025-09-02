@@ -11,12 +11,20 @@ import { deleteBill, fetchAllBills } from "redux/features/bill";
 import { deleteSalary, fetchAllSalaries, fetchAllWages } from "redux/features/salary";
 import Utils from "../../../utils/index";
 import { fetchAllStudents } from "redux/features/students";
+import { fetchAllEmployees } from "redux/features/employee";
 
 // Format the price above to USD using the locale, style, and currency.
-let IDRFormat = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "IDR",
-});
+// let IDRFormat = new Intl.NumberFormat("en-US", {
+//   style: "currency",
+//   currency: "IDR",
+// });
+
+let IDRFormat = {
+  format: (value) => {
+    if (value == null || isNaN(value)) return "Rp 0";
+    return "Rp " + Number(value).toLocaleString("id-ID");
+  },
+};
 
 const LocalizedModal = () => {
   const [open, setOpen] = useState(false);
@@ -48,6 +56,7 @@ const statusColorMap = {
 };
 
 export const SALARY = () => {
+  const { calculateSalary } = Utils;
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
@@ -140,14 +149,17 @@ export const SALARY = () => {
 
   const { Search } = Input;
 
-  const getProfile = async () => {
+  const getEmployee = async () => {
     try {
-      console.log("Sending token:", localStorage.getItem("token"));
-      const response = await dispatch(getUserProfile()).unwrap();
-      setRole(response.data.user.role_id);
+      const response = await dispatch(fetchAllEmployees()).unwrap();
+      setSubcategories(
+        response.data.map((emp) => ({
+          value: emp.id,
+          label: emp.name,
+        }))
+      );
     } catch (error) {
-      //   setLoading(false);
-      message.error(error?.message || "Failed to fetch data");
+      message.error(error?.message || "Gagal memuat data karyawan");
     }
   };
 
@@ -219,6 +231,31 @@ export const SALARY = () => {
       },
     },
     {
+      title: "T. Transport",
+      key: "t_transport",
+      render: (_, record) => {
+        const transport = record.details?.find((d) => d.component?.id === 3);
+        return transport ? IDRFormat.format(Number(transport.amount) * (transport.qty || 1)) : "-";
+      },
+    },
+
+    {
+      title: "T. Jabatan",
+      key: "t_jabatan",
+      render: (_, record) => {
+        const jabatan = record.details?.find((d) => d.component?.id === 5);
+        return jabatan ? IDRFormat.format(Number(jabatan.amount) * (jabatan.qty || 1)) : "-";
+      },
+    },
+    {
+      title: "T. Lainnya",
+      key: "t_lainnya",
+      render: (_, record) => {
+        const lainnya = record.details?.find((d) => d.component?.id === 6);
+        return lainnya ? IDRFormat.format(Number(lainnya.amount) * (lainnya.qty || 1)) : "-";
+      },
+    },
+    {
       title: "Bonus",
       key: "bonus",
       render: (_, record) => {
@@ -236,32 +273,13 @@ export const SALARY = () => {
     },
     {
       title: "THP",
-      dataIndex: "total_earning",
       key: "take_home_pay",
-      //   render: (val) => (val != null ? IDRFormat.format(val) : "-"),
       render: (_, record) => {
-        // ambil gaji pokok
-        const gapok = Number(record.base_salary || 0);
-
-        // ambil detail komponen
-        const details = record.details || [];
-
-        // jumlahkan allowance + bonus
-        const allowanceAndBonus = details
-          .filter((d) => ["allowance", "bonus"].includes(d.component?.type))
-          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-        // jumlahkan potongan
-        const deductions = details
-          .filter((d) => d.component?.type === "deduction")
-          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-        // hitung THP
-        const thp = gapok + allowanceAndBonus - deductions;
-
+        const { thp } = calculateSalary(record);
         return IDRFormat.format(thp);
       },
     },
+
     {
       title: "Bank",
       dataIndex: ["employee", "bank_name"],
@@ -357,6 +375,13 @@ export const SALARY = () => {
     });
   };
 
+  const handleSearchByEmployeeId = (value) => {
+    const params = { ...filters, employee_id: value };
+    console.log("params: ", params);
+
+    setFilters(params);
+  };
+
   const handleDueDateRangeChange = (dates) => {
     setFilters({
       ...filters,
@@ -393,22 +418,22 @@ export const SALARY = () => {
   //     getProfile()
   //   }, [filters]);
 
-  const getSubcategories = async () => {
-    try {
-      const response = await dispatch(fetchAllStudents()).unwrap();
-      console.log("response: ", response);
-      setSubcategories(
-        response.data.map((guardian) => {
-          return {
-            value: guardian.id,
-            label: guardian.name,
-          };
-        })
-      );
-    } catch (error) {
-      message.error(error?.message || "Failed to fetch data");
-    }
-  };
+  //   const getSubcategories = async () => {
+  //     try {
+  //       const response = await dispatch(fetchAllStudents()).unwrap();
+  //       console.log("response: ", response);
+  //       setSubcategories(
+  //         response.data.map((guardian) => {
+  //           return {
+  //             value: guardian.id,
+  //             label: guardian.name,
+  //           };
+  //         })
+  //       );
+  //     } catch (error) {
+  //       message.error(error?.message || "Failed to fetch data");
+  //     }
+  //   };
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -426,10 +451,14 @@ export const SALARY = () => {
     fetchAll();
   }, [filters]);
 
-  // Fetch all students once, when the component mounts
   useEffect(() => {
-    getSubcategories();
+    getEmployee();
   }, []);
+
+  // Fetch all students once, when the component mounts
+  //   useEffect(() => {
+  //     getSubcategories();
+  //   }, []);
 
   //   Dummy helper
   const maskAccount = (v) => {
@@ -442,122 +471,116 @@ export const SALARY = () => {
   const printSlip = (data) => {
     if (!data) return;
 
-    const periodeLabel = data.periode ? moment(data.periode, "YYYY-MM").format("MMMM YYYY") : "-";
-    const idr = (n) => (n != null ? IDRFormat.format(n) : "-");
+    const { gapok, bonuses, deductions, thp } = calculateSalary(data);
+    const periodeLabel = data.period?.period_name || "-";
+    // const idr = (n) => (n != null ? IDRFormat.format(n) : "-");
+    const formatRp = (value) => {
+      if (value == null || isNaN(value)) return "Rp 0";
+      return "Rp " + Number(value).toLocaleString("id-ID");
+    };
     const accountMasked = maskAccount(data.payout_account_no);
 
+    // ambil semua tunjangan (allowance) dari details
+    const allowanceRows = (data.details || [])
+      .filter((d) => d.component?.type === "allowance")
+      .map(
+        (d) => `
+        <tr>
+          <td>${d.component?.name || "Tunjangan"}</td>
+          <td>${formatRp(Number(d.amount || 0) * (d.qty || 1))}</td>
+        </tr>
+      `
+      )
+      .join("");
+
     const html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-            <meta charset="utf-8" />
-            <title>Slip Gaji - ${data.nama} (${periodeLabel})</title>
-            <style>
-                * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-                body { padding: 24px; color: #111; }
-                .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; }
-                .brand h2 { margin: 0 0 4px 0; }
-                .meta { font-size: 12px; color:#555; }
-                .card { border:1px solid #ddd; border-radius:8px; padding:16px; margin: 8px 0 16px; }
-                .row { display:flex; flex-wrap: wrap; }
-                .col { width: 50%; padding: 4px 8px; }
-                .label { color:#666; font-size: 12px; }
-                .value { font-weight: 600; }
-                .table { width:100%; border-collapse: collapse; margin-top: 8px; }
-                .table th, .table td { border:1px solid #ddd; padding:8px; text-align:left; }
-                .table th { background:#f7f7f7; }
-                .total { text-align:right; font-weight:700; }
-                .footer { margin-top: 24px; font-size:12px; color:#777; }
-                @media print {
-                @page { size: A4; margin: 12mm; }
-                .noprint { display:none; }
-                }
-            </style>
-            </head>
-            <body>
-            <div class="header">
-                <div class="brand">
-                <h2>Yayasan Sopiah</h2>
-                <div class="meta">Slip Gaji • ${periodeLabel}</div>
-                </div>
-                <div class="meta">
-                Karyawan: <strong>${data.nama}</strong><br/>
-                ID: ${data.id}<br/>
-                Jabatan: ${data.jabatan || "-"}
-                </div>
-            </div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8" />
+      <title>Slip Gaji - ${data.employee?.name} (${periodeLabel})</title>
+      <style>
+        * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+        body { padding: 24px; color: #111; }
+        .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; }
+        .brand h2 { margin: 0 0 4px 0; }
+        .meta { font-size: 12px; color:#555; }
+        .card { border:1px solid #ddd; border-radius:8px; padding:16px; margin: 8px 0 16px; }
+        .row { display:flex; flex-wrap: wrap; }
+        .col { width: 50%; padding: 4px 8px; }
+        .label { color:#666; font-size: 12px; }
+        .value { font-weight: 600; }
+        .table { width:100%; border-collapse: collapse; margin-top: 8px; }
+        .table th, .table td { border:1px solid #ddd; padding:8px; text-align:left; }
+        .table th { background:#f7f7f7; }
+        .total { text-align:right; font-weight:700; }
+        .footer { margin-top: 24px; font-size:12px; color:#777; }
+        @media print {
+          @page { size: A4; margin: 12mm; }
+          .noprint { display:none; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="brand">
+          <h2>Yayasan Sopiah</h2>
+          <div class="meta">Slip Gaji • ${periodeLabel}</div>
+        </div>
+        <div class="meta">
+          Karyawan: <strong>${data.employee?.name}</strong><br/>
+          ID: ${data.id}<br/>
+          Jabatan: ${data.employee?.position || "-"}
+        </div>
+      </div>
 
-            <div class="card">
-                <div class="row">
-                <div class="col">
-                    <div class="label">Periode</div>
-                    <div class="value">${periodeLabel}</div>
-                </div>
-                <div class="col">
-                    <div class="label">Status</div>
-                    <div class="value">${data.status || "-"}</div>
-                </div>
-                <div class="col">
-                    <div class="label">Metode</div>
-                    <div class="value">${(data.payout_type || "-").toUpperCase()}</div>
-                </div>
-                <div class="col">
-                    <div class="label">Provider</div>
-                    <div class="value">${data.payout_provider || "-"}</div>
-                </div>
-                <div class="col">
-                    <div class="label">No. Rek/HP</div>
-                    <div class="value">${accountMasked}</div>
-                </div>
-                <div class="col">
-                    <div class="label">Tanggal Pembayaran</div>
-                    <div class="value">${data.payout_date ? moment(data.payout_date).format("DD MMM YYYY") : "-"}</div>
-                </div>
-                </div>
-            </div>
+      <div class="card">
+        <div class="row">
+          <div class="col"><div class="label">Periode</div><div class="value">${periodeLabel}</div></div>
+          <div class="col"><div class="label">Status</div><div class="value">${
+            data.is_paid ? "Paid" : "Unpaid"
+          }</div></div>
+          <div class="col"><div class="label">Metode</div><div class="value">${(
+            data.payout_type || "-"
+          ).toUpperCase()}</div></div>
+          <div class="col"><div class="label">Provider</div><div class="value">${
+            data.payout_provider || "-"
+          }</div></div>
+          <div class="col"><div class="label">No. Rek/HP</div><div class="value">${accountMasked}</div></div>
+          <div class="col"><div class="label">Tanggal Pembayaran</div><div class="value">${
+            data.payout_date ? moment(data.payout_date).format("DD MMM YYYY") : "-"
+          }</div></div>
+        </div>
+      </div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Komponen</th>
-                    <th>Nominal</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Placeholder komponen, nanti tinggal ganti pakai data asli -->
-                <tr><td>Gaji Pokok</td><td>${idr(data.gapok)}</td></tr>
-                <tr><td>Tunjangan</td><td>${idr(data.tunjangan)}</td></tr>
-                <tr><td>Potongan</td><td>${idr(data.potongan ? -Math.abs(data.potongan) : 0)}</td></tr>
-                <tr><td class="total">Take Home Pay</td><td class="total">${idr(data.take_home_pay)}</td></tr>
-                </tbody>
-            </table>
+      <table class="table">
+        <thead>
+          <tr><th>Komponen</th><th>Nominal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Gaji Pokok</td><td>${formatRp(gapok)}</td></tr>
+          ${allowanceRows}
+          <tr><td>Bonus</td><td>${formatRp(bonuses)}</td></tr>
+          <tr><td>Potongan</td><td>-${formatRp(deductions)}</td></tr>
+          <tr><td class="total">Take Home Pay</td><td class="total">${formatRp(thp)}</td></tr>
+        </tbody>
+      </table>
 
-            <div class="footer">
-                Dicetak pada ${moment().format("DD MMM YYYY HH:mm")} • Dokumen ini otomatis dihasilkan dari sistem.
-            </div>
+      <div class="footer">
+        Dicetak pada ${moment().format("DD MMM YYYY HH:mm")} • Dokumen ini otomatis dihasilkan dari sistem.
+      </div>
 
-            <div class="noprint" style="margin-top:16px;">
-                <button onclick="window.print()">Cetak / Simpan PDF</button>
-            </div>
-            </body>
-            </html>
-            `;
+      <div class="noprint" style="margin-top:16px;">
+        <button onclick="window.print()">Cetak / Simpan PDF</button>
+      </div>
+    </body>
+    </html>
+  `;
 
     const w = window.open("", "_blank");
-    // if (!w) {
-    //   alert("Popup diblokir. Izinkan pop-up untuk mengunduh slip.");
-    //   return;
-    // }
     w.document.open();
     w.document.write(html);
     w.document.close();
-    // w.focus();
-    // // Opsional auto-print:
-    // setTimeout(() => {
-    //   try {
-    //     w.print();
-    //   } catch (e) {}
-    // }, 300);
   };
 
   return (
@@ -583,12 +606,12 @@ export const SALARY = () => {
                   // optionFilterProp="children"
                   style={{ width: "100%" }}
                   value={filters.student_id || undefined}
-                  onChange={handleSearchByStudentId}
-                  filterOption={(input, option) => option?.children?.toLowerCase().includes(input.toLowerCase())}
+                  onChange={handleSearchByEmployeeId}
+                  //   filterOption={(input, option) => option?.children?.toLowerCase().includes(input.toLowerCase())}
                 >
-                  {subcategories.map((student) => (
-                    <Select.Option key={student.value} value={student.value}>
-                      {student.label}
+                  {subcategories.map((emp) => (
+                    <Select.Option key={emp.value} value={emp.value}>
+                      {emp.label}
                     </Select.Option>
                   ))}
                 </Select>
@@ -683,12 +706,12 @@ export const SALARY = () => {
 
       <Modal
         title="Slip Gaji"
+        // open={isSlipOpen}
         visible={isSlipOpen}
         onOk={closeSlip}
         onCancel={closeSlip}
         okText="Tutup"
         cancelButtonProps={{ style: { display: "none" } }}
-        destroyOnClose
         footer={[
           <Button key="download" onClick={() => printSlip(slipData)}>
             Unduh Slip (PDF)
@@ -698,41 +721,35 @@ export const SALARY = () => {
           </Button>,
         ]}
       >
-        {slipData ? (
-          <div style={{ lineHeight: 1.9 }}>
-            <div>
-              <strong>Periode</strong>:{" "}
-              {slipData.periode ? moment(slipData.periode, "YYYY-MM").format("MMMM YYYY") : "-"}
-            </div>
-            <div>
-              <strong>ID</strong>: {slipData.id}
-            </div>
-            <div>
-              <strong>Nama</strong>: {slipData.nama}
-            </div>
-            <div>
-              <strong>Jabatan</strong>: {slipData.jabatan}
-            </div>
-            <div>
-              <strong>Take Home Pay</strong>:{" "}
-              {slipData.take_home_pay != null ? IDRFormat.format(slipData.take_home_pay) : "-"}
-            </div>
-            <div>
-              <strong>Metode</strong>: {slipData.payout_type?.toUpperCase() || "-"}
-            </div>
-            <div>
-              <strong>Provider</strong>: {slipData.payout_provider || "-"}
-            </div>
-            <div>
-              <strong>No. Rek/HP</strong>: {slipData.payout_account_no || "-"}
-            </div>
-            <div>
-              <strong>Status</strong>:{" "}
-              <Tag color={statusColorMap[slipData.status] || "default"}>{slipData.status || "-"}</Tag>
-            </div>
-            {/* Placeholder komponen detail — nanti diisi kalau sudah ada breakdown gapok/tunjangan/potongan */}
-          </div>
-        ) : null}
+        {slipData &&
+          (() => {
+            const { gapok, allowances, bonuses, deductions, thp } = calculateSalary(slipData);
+            return (
+              <div style={{ lineHeight: 1.9 }}>
+                <div>
+                  <strong>Nama</strong>: {slipData.employee?.name}
+                </div>
+                <div>
+                  <strong>Jabatan</strong>: {slipData.employee?.position}
+                </div>
+                <div>
+                  <strong>Gaji Pokok</strong>: {IDRFormat.format(gapok)}
+                </div>
+                <div>
+                  <strong>Tunjangan</strong>: {IDRFormat.format(allowances)}
+                </div>
+                <div>
+                  <strong>Bonus</strong>: {IDRFormat.format(bonuses)}
+                </div>
+                <div>
+                  <strong>Potongan</strong>: -{IDRFormat.format(deductions)}
+                </div>
+                <div>
+                  <strong>Take Home Pay</strong>: {IDRFormat.format(thp)}
+                </div>
+              </div>
+            );
+          })()}
       </Modal>
 
       {contextHolder}

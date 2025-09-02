@@ -77,12 +77,9 @@ class Utils {
     R = R < 255 ? R : 255;
     G = G < 255 ? G : 255;
     B = B < 255 ? B : 255;
-    const RR =
-      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16);
-    const GG =
-      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16);
-    const BB =
-      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16);
+    const RR = R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16);
+    const GG = G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16);
+    const BB = B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16);
     return `#${RR}${GG}${BB}`;
   }
 
@@ -209,6 +206,27 @@ class Utils {
   static capitalize = (s) => {
     if (!s || typeof s !== "string") return "";
     return s[0].toUpperCase() + s.slice(1);
+  };
+
+  static calculateSalary = (record) => {
+    const gapok = Number(record.base_salary || 0);
+    const details = record.details || [];
+
+    const allowances = details
+      .filter((d) => d.component?.type === "allowance")
+      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
+
+    const bonuses = details
+      .filter((d) => d.component?.type === "bonus")
+      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
+
+    const deductions = details
+      .filter((d) => d.component?.type === "deduction")
+      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
+
+    const thp = gapok + allowances + bonuses - deductions;
+
+    return { gapok, allowances, bonuses, deductions, thp };
   };
 }
 

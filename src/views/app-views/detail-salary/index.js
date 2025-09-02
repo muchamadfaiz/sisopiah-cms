@@ -98,6 +98,8 @@ export const DETAIL_SALARY = () => {
       values.t_makan ? { component_id: 2, amount: Number(values.t_makan), qty: 1 } : null,
       values.t_transport ? { component_id: 3, amount: Number(values.t_transport), qty: 1 } : null,
       values.t_komunikasi ? { component_id: 4, amount: Number(values.t_komunikasi), qty: 1 } : null,
+      values.t_jabatan ? { component_id: 5, amount: Number(values.t_jabatan), qty: 1 } : null,
+      values.t_lainnya ? { component_id: 6, amount: Number(values.t_lainnya), qty: 1 } : null,
       values.bonus ? { component_id: 10, amount: Number(values.bonus), qty: 1 } : null,
       values.potongan ? { component_id: 11, amount: Number(values.potongan), qty: 1 } : null,
     ].filter(Boolean);
@@ -268,6 +270,10 @@ export const DETAIL_SALARY = () => {
                 <Input placeholder="Contoh: Agustus 2025" />
               </Form.Item>
 
+              <Form.Item label="Nomor Rekening" name="nomor_rekening">
+                <Input />
+              </Form.Item>
+
               <Form.Item label="Tanggal Periode" name="period" rules={[{ required: true }]}>
                 <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
               </Form.Item>
@@ -285,6 +291,14 @@ export const DETAIL_SALARY = () => {
               </Form.Item>
 
               <Form.Item label="Tunjangan Komunikasi" name="t_komunikasi">
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item label="Tunjangan Jabatan" name="t_jabatan">
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item label="Tunjangan Lainnya" name="t_lainnya">
                 <InputNumber style={{ width: "100%" }} />
               </Form.Item>
 
