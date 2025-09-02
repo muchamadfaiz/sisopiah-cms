@@ -56,6 +56,7 @@ const statusColorMap = {
 };
 
 export const SALARY = () => {
+  const { calculateSalary } = Utils;
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
@@ -233,7 +234,7 @@ export const SALARY = () => {
       title: "T. Transport",
       key: "t_transport",
       render: (_, record) => {
-        const transport = record.details?.find((d) => d.component?.id === 4);
+        const transport = record.details?.find((d) => d.component?.id === 3);
         return transport ? IDRFormat.format(Number(transport.amount) * (transport.qty || 1)) : "-";
       },
     },
@@ -242,7 +243,7 @@ export const SALARY = () => {
       title: "T. Jabatan",
       key: "t_jabatan",
       render: (_, record) => {
-        const jabatan = record.details?.find((d) => d.component?.id === 4);
+        const jabatan = record.details?.find((d) => d.component?.id === 5);
         return jabatan ? IDRFormat.format(Number(jabatan.amount) * (jabatan.qty || 1)) : "-";
       },
     },
@@ -250,7 +251,7 @@ export const SALARY = () => {
       title: "T. Lainnya",
       key: "t_lainnya",
       render: (_, record) => {
-        const lainnya = record.details?.find((d) => d.component?.id === 4);
+        const lainnya = record.details?.find((d) => d.component?.id === 6);
         return lainnya ? IDRFormat.format(Number(lainnya.amount) * (lainnya.qty || 1)) : "-";
       },
     },
@@ -272,32 +273,13 @@ export const SALARY = () => {
     },
     {
       title: "THP",
-      dataIndex: "total_earning",
       key: "take_home_pay",
-      //   render: (val) => (val != null ? IDRFormat.format(val) : "-"),
       render: (_, record) => {
-        // ambil gaji pokok
-        const gapok = Number(record.base_salary || 0);
-
-        // ambil detail komponen
-        const details = record.details || [];
-
-        // jumlahkan allowance + bonus
-        const allowanceAndBonus = details
-          .filter((d) => ["allowance", "bonus"].includes(d.component?.type))
-          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-        // jumlahkan potongan
-        const deductions = details
-          .filter((d) => d.component?.type === "deduction")
-          .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-        // hitung THP
-        const thp = gapok + allowanceAndBonus - deductions;
-
+        const { thp } = calculateSalary(record);
         return IDRFormat.format(thp);
       },
     },
+
     {
       title: "Bank",
       dataIndex: ["employee", "bank_name"],
@@ -453,27 +435,6 @@ export const SALARY = () => {
   //     }
   //   };
 
-  const calculateSalaryBreakdown = (data) => {
-    const gapok = Number(data.base_salary || 0);
-    const details = data.details || [];
-
-    const allowances = details
-      .filter((d) => d.component?.type === "allowance")
-      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-    const bonuses = details
-      .filter((d) => d.component?.type === "bonus")
-      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-    const deductions = details
-      .filter((d) => d.component?.type === "deduction")
-      .reduce((sum, d) => sum + Number(d.amount || 0) * (d.qty || 1), 0);
-
-    const thp = gapok + allowances + bonuses - deductions;
-
-    return { gapok, allowances, bonuses, deductions, thp };
-  };
-
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
@@ -510,7 +471,7 @@ export const SALARY = () => {
   const printSlip = (data) => {
     if (!data) return;
 
-    const { gapok, bonuses, deductions, thp } = calculateSalaryBreakdown(data);
+    const { gapok, bonuses, deductions, thp } = calculateSalary(data);
     const periodeLabel = data.period?.period_name || "-";
     // const idr = (n) => (n != null ? IDRFormat.format(n) : "-");
     const formatRp = (value) => {
@@ -762,7 +723,7 @@ export const SALARY = () => {
       >
         {slipData &&
           (() => {
-            const { gapok, allowances, bonuses, deductions, thp } = calculateSalaryBreakdown(slipData);
+            const { gapok, allowances, bonuses, deductions, thp } = calculateSalary(slipData);
             return (
               <div style={{ lineHeight: 1.9 }}>
                 <div>
