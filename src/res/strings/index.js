@@ -82,6 +82,7 @@ export const strings = {
       detail_categorization: "/app/detail-categorization",
       detail_user: "/app/detail-user",
       detail_tag: "/app/detail-tag",
+      detail_wage: "/app/detail-wage",
       detail_subcategory: "/app/detail-subcategory",
       detail_student: "/app/detail-student",
       detail_guardian: "/app/detail-guardian",

@@ -3,16 +3,9 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import StatisticWidget from "components/shared-components/StatisticWidget";
 import { useDispatch } from "react-redux";
-import { fetchProjectSummary } from "redux/features/projects";
-import { fetchAllDapurs } from "redux/features/students";
 import { fetchAllProjects, fetchRankingCompany } from "redux/features/projects";
-import { kabupatens, opds, categories, sdgs } from '../../../constants/DataConstant'
 import { getUserProfile } from "redux/features/auth";
-import { PROJECTS } from "../projects";
-import Map from "../../../components/Maps";
 import OPD_PROJECTS from "../student";
-import VerificationProjects from "../verification-projects";
-import { MYPROJECTS } from "../my-projects";
 
 let IDRFormat = new Intl.NumberFormat('en-US', {
   style: 'currency',

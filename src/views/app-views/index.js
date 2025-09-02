@@ -10,15 +10,7 @@ import DASHBOARD from "./dashboard";
 import CATEGORIES from "./categories";
 import CONTENTS from "./contents";
 import USERS from "./users";
-import PROJECTS from "./projects";
-import MY_DAPUR from "./my-dapur";
-import OPEN_PROJECTS from "./open-projects";
-import FINISHED_PROJECTS from "./finished-projects";
-import VERIFICATION_PROJECTS from "./verification-projects";
 import VENDORS from "./vendors";
-import MY_TARGETS from "./my-targets";
-import WAJIB_PAJAK from "./wajib-pajak";
-import MY_PROJECTS from "./my-projects";
 import SUBCATEGORY from "./subcategories";
 import GUARDIAN from "./guardian";
 import STUDENT from "./student";
@@ -29,12 +21,7 @@ import WAGE from "./wage";
 import DETAIL_CATEGORY from "./detail-category";
 import DETAIL_CONTENT from "./detail-content";
 import DETAIL_VENDOR from "./detail-vendor";
-import DETAIL_PROJECT_VERIFICATION_PROECESS from "./detail-project-verification-process";
-import AMBIL_PROJECT from "./ambil-project";
-import DETAIL_WAJIB from "./detail-wajib";
 import DETAIL_USER from "./detail-user";
-import DETAIL_PROJECT_READ_ONLY from "./detail-project-read-only";
-import DETAIL_PROJECT_OPD from "./detail-project-opd";
 import DETAIL_TAG from "./detail-tag";
 import DETAIL_SUBCATEGORY from "./detail-subcategory";
 import DETAIL_GUARDIAN from "./detail-guardian";
@@ -81,18 +68,6 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.my_projects}`}
-          component={MY_PROJECTS}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.my_dapur}`}
-          component={MY_DAPUR}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
           path={`${strings.navigation.path.student}`}
           component={STUDENT}
         />
@@ -114,23 +89,11 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.wage}`}
           component={WAGE}
         />
-        {/* <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.finished_projects}`}
-          component={FINISHED_PROJECTS}
-        /> */}
         <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.subcategories}`}
           component={SUBCATEGORY}
-        />
-        <PrivateRoute
-          privileges={verifikator}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.verification_projects}`}
-          component={VERIFICATION_PROJECTS}
         />
         <PrivateRoute
           privileges={admin_privileges}
@@ -139,34 +102,10 @@ export const AppViews = ({ match }) => {
           component={CONTENTS}
         />
         <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.projects}`}
-          component={PROJECTS}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.open_projects}`}
-          component={OPEN_PROJECTS}
-        />
-        <PrivateRoute
-          privileges={admin_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.wajib_pajak}`}
-          component={WAJIB_PAJAK}
-        />
-        <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.vendor}`}
           component={VENDORS}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.my_targets}`}
-          component={MY_TARGETS}
         />
         <PrivateRoute
           privileges={admin_privileges}
@@ -197,12 +136,6 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_wajib}`}
-          component={DETAIL_WAJIB}
-        />
-        <PrivateRoute
-          privileges={admin_privileges}
-          requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_vendor}`}
           component={DETAIL_VENDOR}
         />
@@ -227,18 +160,6 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project_read_only}`}
-          component={DETAIL_PROJECT_READ_ONLY}
-        />
-        <PrivateRoute
-          privileges={verifikator}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project_verification}`}
-          component={DETAIL_PROJECT_VERIFICATION_PROECESS}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_user}`}
           component={DETAIL_USER}
         />
@@ -249,22 +170,10 @@ export const AppViews = ({ match }) => {
           component={DETAIL_TAG}
         />
         <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project_opd}`}
-          component={DETAIL_PROJECT_OPD}
-        />
-        <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.detail_subcategory}`}
           component={DETAIL_SUBCATEGORY}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.ambil_project}`}
-          component={AMBIL_PROJECT}
         />
 
         <PrivateRoute
