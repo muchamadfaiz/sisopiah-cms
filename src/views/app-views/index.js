@@ -161,27 +161,14 @@ export const AppViews = ({ match }) => {
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-<<<<<<< HEAD
-=======
           path={`${strings.navigation.path.detail_salary}`}
           component={DETAIL_SALARY}
         />
+       
+    
         <PrivateRoute
           privileges={all_privileges}
           requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project_read_only}`}
-          component={DETAIL_PROJECT_READ_ONLY}
-        />
-        <PrivateRoute
-          privileges={verifikator}
-          requiredPrivilege={privilege}
-          path={`${strings.navigation.path.detail_project_verification}`}
-          component={DETAIL_PROJECT_VERIFICATION_PROECESS}
-        />
-        <PrivateRoute
-          privileges={all_privileges}
-          requiredPrivilege={privilege}
->>>>>>> 9ac6ef5174d6474612e57cd1c33f2d5c031b5d30
           path={`${strings.navigation.path.detail_user}`}
           component={DETAIL_USER}
         />
