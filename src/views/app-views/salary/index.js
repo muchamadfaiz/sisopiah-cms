@@ -588,8 +588,8 @@ export const SALARY = () => {
       <LocalizedModal></LocalizedModal>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
-          <h2>Gaji</h2>
-          <p>Daftar semua gaji</p>
+          <h2>Sistem Penggajian</h2>
+          <p>Daftar semua gaji karyawan Sopiah</p>
         </Col>
       </Row>
       <Row gutter={24}>
