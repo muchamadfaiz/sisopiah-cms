@@ -75,6 +75,15 @@ const dashBoardNavTree = [
         access: admin_privileges,
         submenu: [],
       },
+      {
+        key: "Staff",
+        path: strings.navigation.path.employee,
+        title: "Staff",
+        icon: UserOutlined,
+        breadcrumb: false,
+        access: admin_privileges,
+        submenu: [],
+      },
       // {
       //   key: "Verifikasi Dapur",
       //   path: strings.navigation.path.verification_projects,
