@@ -5,24 +5,23 @@ import Icon from "@ant-design/icons";
 import navigationConfig from "configs/NavigationConfig";
 import { connect } from "react-redux";
 import { SIDE_NAV_LIGHT, NAV_TYPE_SIDE } from "constants/ThemeConstant";
-import utils from 'utils'
+import utils from "utils";
 import { onMobileNavToggle } from "redux/features/theme";
 import React, { useState, useEffect } from "react";
-import jwt_decode from 'jwt-decode'
+import jwt_decode from "jwt-decode";
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
 
 const titleStyle = {
   marginTop: "-20px",
-}
+};
 
 const MenuStyle = {
-  fontSize: "1em"
-}
+  fontSize: "1em",
+};
 
-const setLocale = (isLocaleOn, localeKey) =>
-  isLocaleOn ? <IntlMessage id={localeKey} /> : localeKey.toString();
+const setLocale = (isLocaleOn, localeKey) => (isLocaleOn ? <IntlMessage id={localeKey} /> : localeKey.toString());
 
 const setDefaultOpen = (key) => {
   let keyList = [];
@@ -39,29 +38,30 @@ const setDefaultOpen = (key) => {
 };
 
 const SideNavContent = (props) => {
-  const [role, setRole] = useState("user")
+  const [role, setRole] = useState("user");
   const { sideNavTheme, routeInfo, hideGroupTitle, localization, onMobileNavToggle } = props;
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg')
+  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
   const closeMobileNav = () => {
     if (isMobile) {
-      onMobileNavToggle(false)
+      onMobileNavToggle(false);
     }
-  }
+  };
 
   useEffect(() => {
     try {
-      if (localStorage.getItem('token')) {
-        const token = localStorage.getItem('token');
+      if (localStorage.getItem("token")) {
+        const token = localStorage.getItem("token");
         const decoded = jwt_decode(token);
-         console.log("Decoded token:", decoded); // <-- ini buat cek seluruh isi token
-      console.log("Role from token:", decoded.role_id); // <-- ini buat pastikan role-nya
+        console.log("Decoded token:", decoded); // <-- ini buat cek seluruh isi token
+        console.log("Role from token:", decoded.role_id); // <-- ini buat pastikan role-nya
         // setRole(decoded.role_id)
-        setRole(1) //next ganti ini ambil dari api
+        // setRole(1) //next ganti ini ambil dari api
+        setRole(decoded.role); //next ganti ini ambil dari api
       }
     } catch (err) {
-      console.log({ err })
+      console.log({ err });
     }
-  }, [])
+  }, []);
 
   return (
     <Menu
@@ -75,61 +75,67 @@ const SideNavContent = (props) => {
     >
       {navigationConfig.map((menu) =>
         menu.submenu.length > 0 ? (
-          <Menu.ItemGroup
-            key={menu.key}
-            title={setLocale(localization, menu.title)}
-          >
+          <Menu.ItemGroup key={menu.key} title={setLocale(localization, menu.title)}>
             {menu.submenu.map((subMenuFirst) =>
               subMenuFirst.submenu.length > 0 ? (
                 <SubMenu
-                  icon={
-                    subMenuFirst.icon ? (
-                      <Icon component={subMenuFirst?.icon} />
-                    ) : null
-                  }
+                  icon={subMenuFirst.icon ? <Icon component={subMenuFirst?.icon} /> : null}
                   key={subMenuFirst.key}
                   title={setLocale(localization, subMenuFirst.title)}
                 >
                   {subMenuFirst.submenu.map((subMenuSecond) => (
                     <Menu.Item key={subMenuSecond.key} style={MenuStyle}>
-                      {subMenuSecond.icon ? (
-                        <Icon component={subMenuSecond?.icon} />
-                      ) : null}
-                      <span style={titleStyle}>
-                        {setLocale(localization, subMenuSecond.title)}
-                      </span>
+                      {subMenuSecond.icon ? <Icon component={subMenuSecond?.icon} /> : null}
+                      <span style={titleStyle}>{setLocale(localization, subMenuSecond.title)}</span>
                       <Link onClick={() => closeMobileNav()} to={subMenuSecond.path} />
                     </Menu.Item>
                   ))}
                 </SubMenu>
               ) : (
-                subMenuFirst.access?.includes(role) && 
-                (<Menu.Item key={subMenuFirst.key} style={MenuStyle}>
-                  {subMenuFirst.icon ? <Icon component={subMenuFirst.icon} /> : null}
-                  <span style={titleStyle}>{setLocale(localization, subMenuFirst.title)}</span>
-                  <Link onClick={() => closeMobileNav()} to={subMenuFirst.path} />
-                </Menu.Item>
+                (() => {
+                  console.log("=== Menu Access Check ===");
+                  console.log("Menu:", subMenuFirst.title);
+                  console.log("Access allowed:", subMenuFirst.access);
+                  console.log("User role:", role);
+                  console.log("Result:", subMenuFirst.access?.includes(role));
+
+                  return subMenuFirst.access?.includes(role);
+                })() && (
+                  <Menu.Item key={subMenuFirst.key} style={MenuStyle}>
+                    {subMenuFirst.icon ? <Icon component={subMenuFirst.icon} /> : null}
+                    <span style={titleStyle}>{setLocale(localization, subMenuFirst.title)}</span>
+                    <Link onClick={() => closeMobileNav()} to={subMenuFirst.path} />
+                  </Menu.Item>
                 )
               )
             )}
           </Menu.ItemGroup>
         ) : (
-          menu.access.includes(role) && 
-          (<Menu.Item key={menu.key} style={MenuStyle}>
-            {menu.icon ? <Icon component={menu?.icon} /> : null}
-            <span style={titleStyle}>{setLocale(localization, menu?.title)}</span>
-            {menu.path ? <Link onClick={() => closeMobileNav()} to={menu.path} /> : null}
-          </Menu.Item>)
+          (() => {
+            console.log("=== Menu Access Check ===");
+            console.log("Menu:", menu.title);
+            console.log("Access allowed:", menu.access);
+            console.log("User role:", role);
+            console.log("Result:", menu.access?.includes(role));
+
+            return menu.access?.includes(role);
+          })() && (
+            <Menu.Item key={menu.key} style={MenuStyle}>
+              {menu.icon ? <Icon component={menu?.icon} /> : null}
+              <span style={titleStyle}>{setLocale(localization, menu?.title)}</span>
+              {menu.path ? <Link to={menu.path} /> : null}
+            </Menu.Item>
+          )
         )
       )}
     </Menu>
-  )
-}
+  );
+};
 
 const TopNavContent = (props) => {
   const { topNavColor, localization } = props;
   return (
-    <Menu mode="horizontal" style={{ backgroundColor: topNavColor }} >
+    <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>
         menu.submenu.length > 0 ? (
           <SubMenu
@@ -146,27 +152,19 @@ const TopNavContent = (props) => {
               subMenuFirst.submenu.length > 0 ? (
                 <SubMenu
                   key={subMenuFirst.key}
-                  icon={
-                    subMenuFirst.icon ? (
-                      <Icon component={subMenuFirst?.icon} />
-                    ) : null
-                  }
+                  icon={subMenuFirst.icon ? <Icon component={subMenuFirst?.icon} /> : null}
                   title={setLocale(localization, subMenuFirst.title)}
                 >
                   {subMenuFirst.submenu.map((subMenuSecond) => (
                     <Menu.Item key={subMenuSecond.key}>
-                      <span>
-                        {setLocale(localization, subMenuSecond.title)}
-                      </span>
+                      <span>{setLocale(localization, subMenuSecond.title)}</span>
                       <Link to={subMenuSecond.path} />
                     </Menu.Item>
                   ))}
                 </SubMenu>
               ) : (
                 <Menu.Item key={subMenuFirst.key}>
-                  {subMenuFirst.icon ? (
-                    <Icon component={subMenuFirst?.icon} />
-                  ) : null}
+                  {subMenuFirst.icon ? <Icon component={subMenuFirst?.icon} /> : null}
                   <span>{setLocale(localization, subMenuFirst.title)}</span>
                   <Link to={subMenuFirst.path} />
                 </Menu.Item>
@@ -186,11 +184,7 @@ const TopNavContent = (props) => {
 };
 
 const MenuContent = (props) => {
-  return props.type === NAV_TYPE_SIDE ? (
-    <SideNavContent {...props} />
-  ) : (
-    <TopNavContent {...props} />
-  );
+  return props.type === NAV_TYPE_SIDE ? <SideNavContent {...props} /> : <TopNavContent {...props} />;
 };
 
 const mapStateToProps = ({ theme }) => {

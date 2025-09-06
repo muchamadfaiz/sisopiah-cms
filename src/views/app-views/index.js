@@ -2,7 +2,7 @@ import React, { Suspense, useState, useEffect } from "react";
 import { Switch, Redirect } from "react-router-dom";
 import PrivateRoute from "components/PrivateRoute";
 import { strings } from "res";
-import { all_privileges, admin_privileges, verifikator } from "res/privileges/index";
+import { all_privileges, admin_privileges, verifikator, super_admin_privileges } from "res/privileges/index";
 import Loading from "components/shared-components/Loading";
 
 // Pages
@@ -46,7 +46,9 @@ export const AppViews = ({ match }) => {
         const decoded = jwt_decode(token);
 
         // setPrivilege(decoded.role_id)
-        setPrivilege(1); //ini nanti di sesuiakan lagi #TODO
+        // setPrivilege("superadmin"); //ini nanti di sesuiakan lagi #TODO
+        setPrivilege(decoded.role); //ini nanti di sesuiakan lagi #TODO
+        // setPrivilege(1); //ini nanti di sesuiakan lagi #TODO
       }
     } catch (err) {
       console.log({ err });
@@ -99,7 +101,7 @@ export const AppViews = ({ match }) => {
           path={`${strings.navigation.path.employee}`}
           component={EMPLOYEE}
         />
-   
+
         <PrivateRoute
           privileges={admin_privileges}
           requiredPrivilege={privilege}
@@ -119,7 +121,7 @@ export const AppViews = ({ match }) => {
           component={VENDORS}
         />
         <PrivateRoute
-          privileges={admin_privileges}
+          privileges={super_admin_privileges}
           requiredPrivilege={privilege}
           path={`${strings.navigation.path.users}`}
           component={USERS}

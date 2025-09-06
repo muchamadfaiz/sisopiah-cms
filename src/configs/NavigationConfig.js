@@ -15,6 +15,7 @@ import {
 import {
   all_privileges,
   admin_privileges,
+  super_admin_privileges,
   all_projects,
   opd_privileges,
   my_projects_privileges,
@@ -45,7 +46,7 @@ const dashBoardNavTree = [
         title: "Murid",
         icon: BuildOutlined,
         breadcrumb: false,
-        access: admin_privileges,
+        access: [...admin_privileges, ...super_admin_privileges],
         submenu: [],
       },
       {
@@ -54,7 +55,7 @@ const dashBoardNavTree = [
         title: "Wali Murid",
         icon: FileOutlined,
         breadcrumb: false,
-        access: admin_privileges,
+        access: [...admin_privileges, ...super_admin_privileges],
         submenu: [],
       },
       {
@@ -63,7 +64,7 @@ const dashBoardNavTree = [
         title: "Tagihan",
         icon: CheckCircleOutlined,
         breadcrumb: false,
-        access: admin_privileges,
+        access: [...admin_privileges, ...super_admin_privileges],
         submenu: [],
       },
       {
@@ -72,7 +73,7 @@ const dashBoardNavTree = [
         title: "Gaji",
         icon: AimOutlined,
         breadcrumb: false,
-        access: admin_privileges,
+        access: super_admin_privileges,
         submenu: [],
       },
       {
@@ -81,7 +82,7 @@ const dashBoardNavTree = [
         title: "Staff",
         icon: UserOutlined,
         breadcrumb: false,
-        access: admin_privileges,
+        access: [...admin_privileges, ...super_admin_privileges],
         submenu: [],
       },
       // {
@@ -116,7 +117,7 @@ const dashBoardNavTree = [
         path: strings.navigation.path.users,
         title: "Pengguna",
         icon: UserOutlined,
-        access: admin_privileges,
+        access: super_admin_privileges,
         //   breadcrumb: false,
         submenu: [],
       },
