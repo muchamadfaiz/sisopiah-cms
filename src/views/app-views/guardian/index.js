@@ -274,7 +274,7 @@ export const GUARDIAN = () => {
       console.log(typeof id);
       await dispatch(deleteGuardian(id)).unwrap();
       message.success("Wali murid berhasil dihapus");
-      getData(filters); // reload data table
+      getData(filters);
     } catch (error) {
       console.error("Delete guardian error:", error);
       message.error(error?.message || "Wali murid tidak bisa dihapus ");
@@ -408,7 +408,7 @@ export const GUARDIAN = () => {
               pagination={{
                 defaultPageSize: 10,
                 defaultCurrent: 1,
-                total: metaData.total_data,
+                total: metaData.total,
               }}
               loading={isLoading}
               onChange={handleTableChange}
