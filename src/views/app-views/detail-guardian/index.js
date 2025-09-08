@@ -5,16 +5,12 @@ import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { Select } from "antd";
 import { fetchAllSubcategory } from "redux/features/subcategory";
-import { fetchAllWajib } from 'redux/features/wajib_pajak';
+import { fetchAllWajib } from "redux/features/wajib_pajak";
 import { fetchAllTags } from "redux/features/tags";
 import { getUserProfile } from "redux/features/auth";
-import { kabupatens, opds, categories, sdgs } from '../../../constants/DataConstant'
+import { kabupatens, opds, categories, sdgs } from "../../../constants/DataConstant";
 import Map from "../../../components/EditableMap";
-import {
-  addProject,
-  fetchOneProject,
-  updateProject,
-} from "redux/features/projects";
+import { addProject, fetchOneProject, updateProject } from "redux/features/projects";
 import { MyEditor } from "../../../components/Editor";
 import moment from "moment";
 import { addStudent, fetchOneStudent, updateStudent } from "redux/features/students";
@@ -32,14 +28,14 @@ const rules = [
   },
 ];
 
-export const DETAIL_GUARDIAN= () => {
+export const DETAIL_GUARDIAN = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
   const location = useLocation();
   const [idBody, setIdBody] = useState("");
   const [perusahaan, setPerusahaan] = useState("");
-  const [companies, setCompanies] = useState([])
+  const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState("");
   const [enBody, setEnBody] = useState("");
   const [kebutuhan, setKebutuhan] = useState("");
@@ -47,7 +43,7 @@ export const DETAIL_GUARDIAN= () => {
   const [bast, setBast] = useState("");
   const [subcategories, setSubcategories] = useState();
   const [tags, setTags] = useState();
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState("");
 
   const [kabupaten, setKabupaten] = useState("");
   const [opd, setOpd] = useState("");
@@ -60,6 +56,7 @@ export const DETAIL_GUARDIAN= () => {
         ...values,
         id: location.state.id,
       });
+      console.log("values dari guardian: ", values);
     } else {
       createData(values);
     }
@@ -68,8 +65,8 @@ export const DETAIL_GUARDIAN= () => {
   const getProfile = async () => {
     try {
       const response = await dispatch(getUserProfile()).unwrap();
-      setRole(response.data.user.role_id)
-      setPerusahaan(response.data.user.perusahaan)
+      setRole(response.data.user.role_id);
+      setPerusahaan(response.data.user.perusahaan);
     } catch (error) {
       setLoading(false);
       message.error(error?.message || "Failed to fetch data");
@@ -79,16 +76,16 @@ export const DETAIL_GUARDIAN= () => {
   const getAllCompanies = async () => {
     try {
       const { data } = await dispatch(fetchAllWajib({ limit: 1000 })).unwrap();
-      const list_pt = data.data.map(item => ({
+      const list_pt = data.data.map((item) => ({
         value: item.perusahaan,
-        label: item.perusahaan
+        label: item.perusahaan,
       }));
 
       setCompanies(list_pt);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const [markerLocation, setMarkerLocation] = useState({
     latitude: null,
@@ -102,46 +99,50 @@ export const DETAIL_GUARDIAN= () => {
 
   const createData = async (values) => {
     try {
-      await dispatch(addGuardian({
-        ...values,
-        // name: values.name.toUpperCase(),
-        // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
-        // longitude: markerLocation.longitude ? markerLocation.longitude?.toString() : "104.756554",
-        // sdg: values.sdg || "LAINNYA",
-        // opd: values.opd || "LAINNYA",
-        // kecamatan: values.kecamatan ? values.kecamatan : "SUMATERA SELATAN",
-        // kelurahan: values.kelurahan ? values.kelurahan : "SUMATERA SELATAN",
-        // koordinat: values.koordinat ? values.koordinat : "SUMATERA SELATAN",
-        // kabupaten: values.kabupaten ? values.kabupaten : "SUMATERA SELATAN",
-        // endDate: values.deadline,
-        // sgd: values.sdg || "LAINNYA",
-        // kategori: values.kategori || "LAINNYA",
-        // pic_id: 1,
-        // vendor_id: 1,
-        // file: '-',
-        // owner: role === 1 ? values.perusahaan : perusahaan,
-        // perusahaan: role === 1 ? values.perusahaan : perusahaan,
-        // status: "OPEN",
-        // verification: "WAITING",
-        // cost: parseInt(values.cost || 0),
-        // actual: parseInt(values.actual || 0),
-        // diskon_pajak: parseInt(values.diskon_pajak || 0),
-        // bast: bast,
-        // proposal: values.proposal || "-",
-        // certificate: values.certificate ? values.certificate : "-",
-        // laporan: values.laporan || "-",
-        // description: values.description || "-",
-        // nilai_sroi: parseInt(values.nilai_sroi) || 0,
-        // kebutuhan: kebutuhan,
-      })).unwrap();
-    //   if (role === 1) {
-    //     history.push("/app/my-projects");
-    //     } else {
-        history.push("/app/wali-murid");
-        // }
-
+      await dispatch(
+        addGuardian({
+          ...values,
+          // name: values.name.toUpperCase(),
+          // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
+          // longitude: markerLocation.longitude ? markerLocation.longitude?.toString() : "104.756554",
+          // sdg: values.sdg || "LAINNYA",
+          // opd: values.opd || "LAINNYA",
+          // kecamatan: values.kecamatan ? values.kecamatan : "SUMATERA SELATAN",
+          // kelurahan: values.kelurahan ? values.kelurahan : "SUMATERA SELATAN",
+          // koordinat: values.koordinat ? values.koordinat : "SUMATERA SELATAN",
+          // kabupaten: values.kabupaten ? values.kabupaten : "SUMATERA SELATAN",
+          // endDate: values.deadline,
+          // sgd: values.sdg || "LAINNYA",
+          // kategori: values.kategori || "LAINNYA",
+          // pic_id: 1,
+          // vendor_id: 1,
+          // file: '-',
+          // owner: role === 1 ? values.perusahaan : perusahaan,
+          // perusahaan: role === 1 ? values.perusahaan : perusahaan,
+          // status: "OPEN",
+          // verification: "WAITING",
+          // cost: parseInt(values.cost || 0),
+          // actual: parseInt(values.actual || 0),
+          // diskon_pajak: parseInt(values.diskon_pajak || 0),
+          // bast: bast,
+          // proposal: values.proposal || "-",
+          // certificate: values.certificate ? values.certificate : "-",
+          // laporan: values.laporan || "-",
+          // description: values.description || "-",
+          // nilai_sroi: parseInt(values.nilai_sroi) || 0,
+          // kebutuhan: kebutuhan,
+        })
+      ).unwrap();
+      //   if (role === 1) {
+      //     history.push("/app/my-projects");
+      //     } else {
+      history.push("/app/wali-murid");
+      // }
     } catch (error) {
-      message.error(error.message || "Ada yang salah dengan data anda! Pastikan semua nilai terisi, jika tidak ada isikan dengan nilai '-'");
+      message.error(
+        error.message ||
+          "Ada yang salah dengan data anda! Pastikan semua nilai terisi, jika tidak ada isikan dengan nilai '-'"
+      );
     }
   };
 
@@ -163,47 +164,49 @@ export const DETAIL_GUARDIAN= () => {
 
   const updateData = async (values) => {
     try {
-      await dispatch(updateGuardian({
-        ...values,
-        // name: values.name.toUpperCase(),
-        // id: location?.state?.id,
-        // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
-        // longitude: markerLocation.longitude ? markerLocation.longitude?.toString() : "104.756554",
-        // pic_id: 1,
-        // vendor_id: 1,
-        // sdg: values.sdg || "LAINNYA",
-        // status: role === 1 || role === 6 ? values.status : "OPEN",
-        // verification: role === 1 || role === 5 ? values.verification : "VERIFIED",
-        // opd: values.opd || "LAINNYA",
-        // file: '-',
-        // diskon_pajak: parseInt(values.diskon_pajak || 0),
-        // kecamatan: values.kecamatan ? values.kecamatan : "SUMATERA SELATAN",
-        // kelurahan: values.kelurahan ? values.kelurahan : "SUMATERA SELATAN",
-        // koordinat: values.koordinat ? values.koordinat : "SUMATERA SELATAN",
-        // kabupaten: values.kabupaten ? values.kabupaten : "SUMATERA SELATAN",
-        // endDate: values.deadline,
-        // sgd: values.sdg || "LAINNYA",
-        // kategori: values.kategori || "LAINNYA",
-        // perusahaan: (role === 1 || role === 4) ? values.perusahaan : perusahaan,
-        // owner: (role === 1 || role === 4) ? values.perusahaan : perusahaan,
-        // cost: parseInt(values.cost || 0),
-        // actual: parseInt(values.actual || 0),
-        // bast: bast,
-        // laporan: laporan,
-        // proposal: values.proposal || "-",
-        // certificate: values.certificate || "-",
-        // description: values.description || "-",
-        // nilai_sroi: (role === 1 || role === 6) ? parseInt(values.nilai_sroi) : 0,
-        // nilai_diskon_pajak: (role === 1 || role === 6) ? parseInt(values.nilai_diskon_pajak) : 0,
-        // kebutuhan: kebutuhan,
-      })).unwrap();
-    //   if (role === 3) {
-    //     history.push("/app/projects-opd");
-    //   } else if (role === 1) {
-    //     history.push("/app/projects");
-    //   } else {
-        history.push("/app/wali-murid");
-    //   }
+      await dispatch(
+        updateGuardian({
+          ...values,
+          // name: values.name.toUpperCase(),
+          // id: location?.state?.id,
+          // latitude: markerLocation.latitude ? markerLocation.latitude?.toString() : "-2.990934",
+          // longitude: markerLocation.longitude ? markerLocation.longitude?.toString() : "104.756554",
+          // pic_id: 1,
+          // vendor_id: 1,
+          // sdg: values.sdg || "LAINNYA",
+          // status: role === 1 || role === 6 ? values.status : "OPEN",
+          // verification: role === 1 || role === 5 ? values.verification : "VERIFIED",
+          // opd: values.opd || "LAINNYA",
+          // file: '-',
+          // diskon_pajak: parseInt(values.diskon_pajak || 0),
+          // kecamatan: values.kecamatan ? values.kecamatan : "SUMATERA SELATAN",
+          // kelurahan: values.kelurahan ? values.kelurahan : "SUMATERA SELATAN",
+          // koordinat: values.koordinat ? values.koordinat : "SUMATERA SELATAN",
+          // kabupaten: values.kabupaten ? values.kabupaten : "SUMATERA SELATAN",
+          // endDate: values.deadline,
+          // sgd: values.sdg || "LAINNYA",
+          // kategori: values.kategori || "LAINNYA",
+          // perusahaan: (role === 1 || role === 4) ? values.perusahaan : perusahaan,
+          // owner: (role === 1 || role === 4) ? values.perusahaan : perusahaan,
+          // cost: parseInt(values.cost || 0),
+          // actual: parseInt(values.actual || 0),
+          // bast: bast,
+          // laporan: laporan,
+          // proposal: values.proposal || "-",
+          // certificate: values.certificate || "-",
+          // description: values.description || "-",
+          // nilai_sroi: (role === 1 || role === 6) ? parseInt(values.nilai_sroi) : 0,
+          // nilai_diskon_pajak: (role === 1 || role === 6) ? parseInt(values.nilai_diskon_pajak) : 0,
+          // kebutuhan: kebutuhan,
+        })
+      ).unwrap();
+      //   if (role === 3) {
+      //     history.push("/app/projects-opd");
+      //   } else if (role === 1) {
+      //     history.push("/app/projects");
+      //   } else {
+      history.push("/app/wali-murid");
+      //   }
     } catch (error) {
       message.error(error?.message || "Failed to fetch data");
     }
@@ -219,14 +222,14 @@ export const DETAIL_GUARDIAN= () => {
       setMarkerLocation({
         latitude: parseFloat(data.data.latitude),
         longitude: parseFloat(data.data.longitude),
-      })
-      setKabupaten(data.data.kabupaten)
-      setKategori(data.data.kategori)
-      setSdg(data.data.sdg)
-      setOpd(data.data.opd)
-      setKebutuhan(data.data.kebutuhan)
-      setLaporan(data.data.laporan)
-      setBast(data.data.bast)
+      });
+      setKabupaten(data.data.kabupaten);
+      setKategori(data.data.kategori);
+      setSdg(data.data.sdg);
+      setOpd(data.data.opd);
+      setKebutuhan(data.data.kebutuhan);
+      setLaporan(data.data.laporan);
+      setBast(data.data.bast);
       form.setFieldsValue({
         ...data.data,
         startDate: moment(data.data.startDate),
@@ -257,7 +260,6 @@ export const DETAIL_GUARDIAN= () => {
   useEffect(() => {
     if (location?.state?.id) {
       getDataById(location?.state?.id);
-
     }
     // getSubcategories();
     // getTags();
@@ -278,34 +280,18 @@ export const DETAIL_GUARDIAN= () => {
       <Row>
         <Col xs={24} sm={24} md={24} lg={24}>
           <Card>
-            <Form
-              name="basic"
-              form={form}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Nama Wali Murid"
-                name="name"
-              >
+            <Form name="basic" form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+              <Form.Item label="Nama Wali Murid" name="name">
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                label="No Hp"
-                name="phone"
-              >
+              <Form.Item label="No Hp" name="phone">
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                label="Alamat"
-                name="address"
-              >
+              <Form.Item label="Alamat" name="address">
                 <Input />
               </Form.Item>
-
 
               {/* {role === 1 && (
                 <Form.Item
@@ -608,11 +594,7 @@ export const DETAIL_GUARDIAN= () => {
               </Tabs> */}
 
               <Form.Item wrapperCol={24}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ width: "100%" }}
-                >
+                <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
                   Submit
                 </Button>
               </Form.Item>

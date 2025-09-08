@@ -11,9 +11,9 @@ import { deleteGuardian, fetchAllGuardians } from "redux/features/guardians";
 import { deleteStudent } from "redux/features/students";
 
 // Format the price above to USD using the locale, style, and currency.
-let IDRFormat = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'IDR',
+let IDRFormat = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "IDR",
 });
 
 const LocalizedModal = () => {
@@ -26,19 +26,12 @@ const LocalizedModal = () => {
   };
   return (
     <>
-      <Modal
-        title="Modal"
-        open={open}
-        onOk={hideModal}
-        onCancel={hideModal}
-        okText="Ok"
-        cancelText="Cancel"
-      >
+      <Modal title="Modal" open={open} onOk={hideModal} onCancel={hideModal} okText="Ok" cancelText="Cancel">
         <p>Anda yakin ingin melakukan aksi ini?</p>
       </Modal>
     </>
   );
-}
+};
 
 export const GUARDIAN = () => {
   const history = useHistory();
@@ -60,27 +53,26 @@ export const GUARDIAN = () => {
 
   const getProfile = async () => {
     try {
-      console.log('Sending token:', localStorage.getItem('token'));
+      console.log("Sending token:", localStorage.getItem("token"));
       const response = await dispatch(getUserProfile()).unwrap();
-      setRole(response.data.user.role_id)
+      setRole(response.data.user.role_id);
     } catch (error) {
-    //   setLoading(false);
+      //   setLoading(false);
       message.error(error?.message || "Failed to fetch data");
     }
   };
 
   const genderMap = {
     P: "Perempuan",
-    L: "Laki-laki"
+    L: "Laki-laki",
   };
 
   const tableColumns = [
     {
-    title: "No",
-    dataIndex: "no",
-    key: "no",
-    render: (_text, _record, index) =>
-        (filters.page - 1) * filters.limit + index + 1,
+      title: "No",
+      dataIndex: "no",
+      key: "no",
+      render: (_text, _record, index) => (filters.page - 1) * filters.limit + index + 1,
     },
     {
       title: "Name",
@@ -133,49 +125,48 @@ export const GUARDIAN = () => {
     //   dataIndex: "phone_number",
     //   key: "phone_number",
     // },
-//     {
-//       title: "Video",
-//       dataIndex: "access_video",
-//       key: "access_video",
-//       render: (text) => (
-//         <div className="text-center">
-//       <Button
-//         type="primary"
-//         style={{ color: "white" }}
-//         onClick={() => {
-//           window.open(text, "_blank");
-//         }}
-//       >
-//         Lihat Video
-//       </Button>
-//     </div>
-//       ),
-//     },
-//     {
-//       title: "Proposal",
-//       dataIndex: "proposal_link",
-//       key: "proposal_link",
-//       render: (text, record) => (
-//     <div className="text-center">
-//       <Button
-//         type="primary"
-//         style={{ color: "white" }}
-//         onClick={() => {
-//           window.open(text, "_blank");
-//         }}
-//       >
-//         Lihat Proposal
-//       </Button>
-//     </div>
-//   ),
-//     },
+    //     {
+    //       title: "Video",
+    //       dataIndex: "access_video",
+    //       key: "access_video",
+    //       render: (text) => (
+    //         <div className="text-center">
+    //       <Button
+    //         type="primary"
+    //         style={{ color: "white" }}
+    //         onClick={() => {
+    //           window.open(text, "_blank");
+    //         }}
+    //       >
+    //         Lihat Video
+    //       </Button>
+    //     </div>
+    //       ),
+    //     },
+    //     {
+    //       title: "Proposal",
+    //       dataIndex: "proposal_link",
+    //       key: "proposal_link",
+    //       render: (text, record) => (
+    //     <div className="text-center">
+    //       <Button
+    //         type="primary"
+    //         style={{ color: "white" }}
+    //         onClick={() => {
+    //           window.open(text, "_blank");
+    //         }}
+    //       >
+    //         Lihat Proposal
+    //       </Button>
+    //     </div>
+    //   ),
+    //     },
     {
       title: () => <div className="text-center">Detail</div>,
       key: "status",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => {
-        if (role !== 1) 
-            {
+        if (role !== 1) {
           return (
             <div className="text-center">
               <Button
@@ -193,7 +184,7 @@ export const GUARDIAN = () => {
                 Detail
               </Button>
             </div>
-          )
+          );
         } else {
           return (
             <div className="text-center">
@@ -211,17 +202,16 @@ export const GUARDIAN = () => {
                 Detail
               </Button>
             </div>
-          )
+          );
         }
-      }
+      },
     },
     {
       title: () => <div className="text-center">Action</div>,
       key: "status",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => {
-        if (role !== 1) 
-            {
+        if (role !== 1) {
           return (
             <div className="text-center">
               <Button
@@ -229,17 +219,17 @@ export const GUARDIAN = () => {
                 style={{ textAlign: "center", color: "white" }}
                 onClick={() => {
                   confirm(record?.id);
-                //   history.push({
-                //     pathname: `${strings.navigation.path.detail_guardian}`,
-                //     state: record,
-                //   });
+                  //   history.push({
+                  //     pathname: `${strings.navigation.path.detail_guardian}`,
+                  //     state: record,
+                  //   });
                 }}
               >
                 {/* Lihat Dapur */}
                 Delete
               </Button>
             </div>
-          )
+          );
         } else {
           return (
             <div className="text-center">
@@ -247,7 +237,7 @@ export const GUARDIAN = () => {
                 type="danger"
                 style={{ textAlign: "center", color: "white" }}
                 onClick={() => {
-                  // confirm(record?.id);
+                  confirm(record?.id);
                   history.push({
                     pathname: `${strings.navigation.path.detail_project}`,
                     state: record,
@@ -257,24 +247,37 @@ export const GUARDIAN = () => {
                 Delete
               </Button>
             </div>
-          )
+          );
         }
-      }
+      },
     },
   ];
 
   const getData = async (params) => {
     try {
-    //   setLoading(true);
+      //   setLoading(true);
       const response = await dispatch(fetchAllGuardians(params)).unwrap();
-      console.log('hahai: ', response.data)
-    //   setData(response.data.Projects);
+      console.log("hahai: ", response.data);
+      //   setData(response.data.Projects);
       setData(response.data);
       setMetaData(response.meta);
-    //   setLoading(false);
+      //   setLoading(false);
     } catch (error) {
-    //   setLoading(false);
+      //   setLoading(false);
       message.error(error?.message || "Failed to fetch data");
+    }
+  };
+
+  const handleDeleteGuardian = async (id) => {
+    try {
+      console.log("Deleting guardian id:", id);
+      console.log(typeof id);
+      await dispatch(deleteGuardian(id)).unwrap();
+      message.success("Wali murid berhasil dihapus");
+      getData(filters); // reload data table
+    } catch (error) {
+      console.error("Delete guardian error:", error);
+      message.error(error?.message || "Wali murid tidak bisa dihapus ");
     }
   };
 
@@ -295,31 +298,31 @@ export const GUARDIAN = () => {
   };
 
   const handleSearchByTitle = (event) => {
-    setFilters({ ...filters, name:event.target.value });
-  }
+    setFilters({ ...filters, name: event.target.value });
+  };
 
   const handleSearchByOPD = (event) => {
-    console.log(event.target)
-    setFilters({ ...filters, opd:event.target.value });
-  }
+    console.log(event.target);
+    setFilters({ ...filters, opd: event.target.value });
+  };
 
   const handleSearchPerusahaan = (event) => {
-    console.log(event.target)
-    setFilters({ ...filters, owner:event.target.value });
-  }
+    console.log(event.target);
+    setFilters({ ...filters, owner: event.target.value });
+  };
 
   const handleSearchKabupaten = (event) => {
-    console.log(event.target)
-    setFilters({ ...filters, regency:event.target.value });
-  }
-    const handleSearchKecamatan = (event) => {
-    console.log(event.target)
-    setFilters({ ...filters, district:event.target.value });
-  }
-    const handleSearchKelurahan = (event) => {
-    console.log(event.target)
-    setFilters({ ...filters, sub_district:event.target.value });
-  }
+    console.log(event.target);
+    setFilters({ ...filters, regency: event.target.value });
+  };
+  const handleSearchKecamatan = (event) => {
+    console.log(event.target);
+    setFilters({ ...filters, district: event.target.value });
+  };
+  const handleSearchKelurahan = (event) => {
+    console.log(event.target);
+    setFilters({ ...filters, sub_district: event.target.value });
+  };
 
   const confirm = (id) => {
     modal.confirm({
@@ -328,34 +331,37 @@ export const GUARDIAN = () => {
       content: "Are you sure wanna delete this?",
       okText: "Yes",
       cancelText: "No",
-      onOk: async () => {
-        await dispatch(deleteGuardian(id));
-        getData();
+      //   onOk: async () => {
+      //     await dispatch(deleteGuardian(id));
+      //     getData();
+      //   },
+      onOk: () => {
+        handleDeleteGuardian(id);
       },
-      onCancel: () => { },
+      onCancel: () => {},
     });
   };
 
-//   useEffect(() => {
-//     getData(filters);
-//     getProfile()
-//   }, [filters]);
+  //   useEffect(() => {
+  //     getData(filters);
+  //     getProfile()
+  //   }, [filters]);
 
   useEffect(() => {
-  const fetchAll = async () => {
-    setLoading(true);
-    try {
-    //   await getProfile();
-      await getData(filters);
-    } catch (error) {
-      message.error("Terjadi kesalahan saat memuat data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchAll = async () => {
+      setLoading(true);
+      try {
+        //   await getProfile();
+        await getData(filters);
+      } catch (error) {
+        message.error("Terjadi kesalahan saat memuat data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchAll();
-}, [filters]);
+    fetchAll();
+  }, [filters]);
 
   return (
     <>
@@ -370,8 +376,13 @@ export const GUARDIAN = () => {
         <Col xs={24} sm={24} md={24} lg={24}>
           <Card>
             <Row gutter={[6, 6]}>
-              <Col md={8} xl={8} sm={24} >
-                <Input onChange={handleSearchByTitle} name="name" placeholder="Cari Berdasarkan Nama Wali Murid" allowClear/>
+              <Col md={8} xl={8} sm={24}>
+                <Input
+                  onChange={handleSearchByTitle}
+                  name="name"
+                  placeholder="Cari Berdasarkan Nama Wali Murid"
+                  allowClear
+                />
               </Col>
               {/* <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchKabupaten} name="guardians" placeholder="Wali Murid" allowClear/>
@@ -382,14 +393,16 @@ export const GUARDIAN = () => {
               <Col md={4} xl={4} sm={24} >
                 <Input onChange={handleSearchPerusahaan} name="owner" placeholder="Perusahaan"></Input>
               </Col> */}
-              <Col md={4} xl={4} sm={24} >
-                <Button type="primary" style={{ width: "100%" }}>Cari</Button>
+              <Col md={4} xl={4} sm={24}>
+                <Button type="primary" style={{ width: "100%" }}>
+                  Cari
+                </Button>
               </Col>
             </Row>
             <Table
               className="no-border-last"
               columns={tableColumns}
-              scroll={{ x: 'max-content' }} // enables horizontal scrolling
+              scroll={{ x: "max-content" }} // enables horizontal scrolling
               dataSource={data}
               rowKey="id"
               pagination={{
