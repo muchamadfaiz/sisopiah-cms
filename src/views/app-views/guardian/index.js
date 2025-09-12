@@ -282,19 +282,11 @@ export const GUARDIAN = () => {
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
-    //sort by date_published
-    let sorterKey = "";
-    // if (sorter.field === "date_published" && sorter.order) {
-    //   sorterKey = sorter.order === "ascend" ? sorter.field : `-${sorter.field}`;
-    //   setFilters({ ...filters, page: 1, sort: sorterKey });
-    // }
-
-    // if (sorter.field === "created_at" && sorter.order) {
-    //   sorterKey = sorter.order === "ascend" ? sorter.field : `-${sorter.field}`;
-    //   setFilters({ ...filters, page: 1, sort: sorterKey });
-    // }
-
-    setFilters({ ...filters, page: pagination.current, sort: sorterKey });
+    setFilters({
+      ...filters,
+      page: pagination.current,
+      limit: pagination.pageSize,
+    });
   };
 
   const handleSearchByTitle = (event) => {
