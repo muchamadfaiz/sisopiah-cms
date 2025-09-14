@@ -282,15 +282,25 @@ export const DETAIL_GUARDIAN = () => {
           <Card>
             <Form name="basic" form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
               <Form.Item label="Nama Wali Murid" name="name">
-                <Input />
+                <Input placeholder="Masukkan nama wali murid" />
               </Form.Item>
 
-              <Form.Item label="No Hp" name="phone">
-                <Input />
+              <Form.Item
+                label="No Hp"
+                name="phone"
+                rules={[
+                  { required: true, message: "Nomor HP wajib diisi" },
+                  {
+                    pattern: /^[0-9]{10,15}$/,
+                    message: "Nomor HP harus berupa angka 10–15 digit",
+                  },
+                ]}
+              >
+                <Input placeholder="Masukkan no hp" />
               </Form.Item>
 
               <Form.Item label="Alamat" name="address">
-                <Input />
+                <Input placeholder="Masukkan alamat" />
               </Form.Item>
 
               {/* {role === 1 && (

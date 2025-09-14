@@ -248,7 +248,7 @@ export const DETAIL_STUDENT = () => {
 
   const getSubcategories = async () => {
     try {
-      const response = await dispatch(fetchAllGuardians()).unwrap();
+      const response = await dispatch(fetchAllGuardians({ limit: 50 })).unwrap();
       console.log("response: ", response);
       setSubcategories(
         response.data.map((guardian) => {
@@ -298,11 +298,6 @@ export const DETAIL_STUDENT = () => {
 
   return (
     <>
-      <p>
-        {subcategories.map((item) => (
-          <p>{item.label}</p>
-        ))}
-      </p>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={24}>
           {/* <h2>Tambah/Update Proyek Baru {perusahaan} Kode {role}</h2> */}
@@ -325,11 +320,11 @@ export const DETAIL_STUDENT = () => {
             >
               <Typography.Title level={5}>Profil Murid</Typography.Title>
               <Form.Item label="Nama Murid" name="name">
-                <Input />
+                <Input placeholder="Masukkan nama murid" />
               </Form.Item>
 
               <Form.Item label="NIS" name="nis">
-                <Input />
+                <Input placeholder="Masukkan NIS" />
               </Form.Item>
 
               <Form.Item label="Gender" name="gender" rules={[{ required: true, message: "Please select a gender!" }]}>
@@ -338,19 +333,29 @@ export const DETAIL_STUDENT = () => {
 
               <Form.Item label="Tanggal Lahir" name="birth_date">
                 {/* <Input /> */}
-                <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+                <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} placeholder="Pilih tanggal lahir" />
               </Form.Item>
 
               <Form.Item label="Kelas" name="class">
-                <Input />
+                <Input placeholder="Masukkan kelas" />
               </Form.Item>
 
               <Form.Item label="Alamat" name="address">
-                <Input />
+                <Input placeholder="Masukkan alamat" />
               </Form.Item>
 
-              <Form.Item label="Wali Murid" name="guardian">
+              {/* <Form.Item label="Wali Murid" name="guardian">
                 <Select placeholder="Pilih Wali Murid" options={subcategories} />
+              </Form.Item> */}
+
+              <Form.Item label="Wali Murid" name="guardian">
+                <Select
+                  placeholder="Pilih Wali Murid"
+                  options={subcategories}
+                  showSearch
+                  optionFilterProp="label"
+                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                />
               </Form.Item>
 
               <Form.Item label="Relasi" name="relation">
