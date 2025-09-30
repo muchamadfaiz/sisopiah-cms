@@ -34,12 +34,12 @@ const PrivateRoute = ({ component: Component, auth, privileges, requiredPrivileg
   const result = privileges && privileges.includes(requiredPrivilege);
 
   // 🔎 Debug log
-  console.log("=== PrivateRoute Check ===");
-  console.log("Route path:", rest.path);
-  console.log("Required privilege:", requiredPrivilege);
-  console.log("Privileges allowed:", privileges);
-  console.log("Match result:", result);
-  console.log("=== PrivateRoute Check ===");
+  //   console.log("=== PrivateRoute Check ===");
+  //   console.log("Route path:", rest.path);
+  //   console.log("Required privilege:", requiredPrivilege);
+  //   console.log("Privileges allowed:", privileges);
+  //   console.log("Match result:", result);
+  //   console.log("=== PrivateRoute Check ===");
 
   return (
     <Route

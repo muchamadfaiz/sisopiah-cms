@@ -72,6 +72,7 @@ export const DETAIL_STUDENT = () => {
   const onFinish = (values) => {
     console.log("values: ", values);
     console.log("location: ", location);
+    const guardianId = Number(values.guardian?.value);
     if (location?.state?.id) {
       updateData({
         ...values,
@@ -89,7 +90,7 @@ export const DETAIL_STUDENT = () => {
         ...values,
         guardians: [
           {
-            guardian_id: values.guardian,
+            guardian_id: guardianId,
             relation: values.relation ? values.relation : "takada",
           },
         ],
@@ -207,7 +208,8 @@ export const DETAIL_STUDENT = () => {
       if (values.guardian && values.guardian !== "-") {
         payload.guardians = [
           {
-            guardian_id: values.guardian,
+            // guardian_id: values.guardian,
+            guardian_id: Number(values.guardian?.value || values.guardian),
             relation: values.relation || "Ayah",
           },
         ];
