@@ -238,7 +238,11 @@ export const DETAIL_STUDENT = () => {
         ...student,
         // birth_date: moment(student.birth_date).format("YYYY-MM-DD") || "-",
         birth_date: student.birth_date ? moment(student.birth_date) : null,
-        guardian: student.guardians?.[0]?.guardian?.id || "-",
+        // guardian: student.guardians?.[0]?.guardian?.id || "-",
+        guardian: {
+          value: student.guardians?.[0]?.guardian?.id,
+          label: student.guardians?.[0]?.guardian?.name,
+        },
         relation: student.guardians?.[0]?.relation || "-",
       });
     } catch (err) {
@@ -269,6 +273,22 @@ export const DETAIL_STUDENT = () => {
       getDataById(location?.state?.id);
     }
   }, []);
+
+  //   useEffect(() => {
+  //     if (location?.state?.id && subcategories.length > 0) {
+  //       getDataById(location.state.id);
+  //     }
+  //   }, [location?.state?.id, subcategories]);
+
+  //   useEffect(() => {
+  //     const fetchAndSet = async () => {
+  //       await getSubcategories();
+  //       if (location?.state?.id) {
+  //         await getDataById(location.state.id);
+  //       }
+  //     };
+  //     fetchAndSet();
+  //   }, [location?.state?.id]);
 
   useEffect(() => {
     getSubcategories();
@@ -355,6 +375,7 @@ export const DETAIL_STUDENT = () => {
                   showSearch
                   optionFilterProp="label"
                   filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  labelInValue
                 />
               </Form.Item>
 
