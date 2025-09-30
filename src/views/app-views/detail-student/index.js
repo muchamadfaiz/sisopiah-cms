@@ -252,7 +252,7 @@ export const DETAIL_STUDENT = () => {
 
   const getSubcategories = async () => {
     try {
-      const response = await dispatch(fetchAllGuardians({ limit: 50 })).unwrap();
+      const response = await dispatch(fetchAllGuardians({ limit: 1000 })).unwrap();
       console.log("response: ", response);
       setSubcategories(
         response.data.map((guardian) => {
